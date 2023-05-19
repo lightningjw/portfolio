@@ -41,7 +41,7 @@ export const Banner = () => {
       setIsDeleting(false);
       setLoopNum(loopNum + 1);
       setIndex(1);
-      setDelta(500);
+      setDelta(100);
     } else {
       setIndex(prevIndex => prevIndex + 1);
     }
@@ -56,7 +56,7 @@ export const Banner = () => {
               {({ isVisible }) =>
               <div className={isVisible ? "animate__animated animate__fadeIn" : ""}>
                 {/* <span className="tagline">Welcome to my Portfolio</span> */}
-                <h1>{`I'm `}<span className="txt-rotate, highlight" dataPeriod="1000" data-rotate='[ "Justin Wong", "a Computer Science Student", "a Sports Enthusiast", "a World Traveler" ]'><span className="wrap">{text}</span></span></h1>
+                <h1>{`I'm `}<span className="txt-rotate, highlight" dataPeriod="2000" data-rotate='[ "Justin Wong", "a Computer Science Student", "a Sports Enthusiast", "a World Traveler" ]'><span className="wrap">{text}</span></span></h1>
                   <p className="intro">I am an undergraduate student at the University of Michigan’s College of Engineering pursuing a degree in Computer Science. 
                     As a member of the Engineering Global Leadership Honors Program, I am expanding my global perspective through the International Minor for Engineering. 
                     This program allowed me to study abroad in Dublin, Ireland, and volunteer on the Blackfeet Indian Reservation in Montana. 

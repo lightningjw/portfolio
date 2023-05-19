@@ -233,7 +233,7 @@ nav.navbar .navbar-toggler[aria-expanded="true"] .navbar-toggler-icon {
 /************ Banner Css ************/
 .banner {
   margin-top: 0;
-  padding: 260px 0 100px 0;
+  padding: 200px 0 100px 0;
   /* background-image: url('./assets/img/banner-bg.png');
   background-position: top center;
   background-size: cover;
@@ -251,6 +251,9 @@ nav.navbar .navbar-toggler[aria-expanded="true"] .navbar-toggler-icon {
 } */
 h1 .highlight {
   background: linear-gradient(90.21deg, rgba(170, 54, 124, 0.5) -5.91%, rgba(74, 47, 189, 0.5) 111.58%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
 }
 .banner h1 {
   font-size: 65px;
@@ -301,6 +304,77 @@ h1 .highlight {
 } */
 .txt-rotate > .wrap {
   border-right: 0.08em solid #666;
+}
+
+/************ Timeline Css ************/
+.timeline {
+  margin-top: 0;
+  padding: 0px 0 100px 0;
+  /* background-image: url('./assets/img/banner-bg.png');
+  background-position: top center;
+  background-size: cover;
+  background-repeat: no-repeat; */
+}
+
+.timeline .title{
+  font-size: 45px;
+	font-weight: 700;
+  text-align: center;
+}
+
+.timeline .vertical-timeline-element-content {
+  box-shadow: 0 0.25em 0.5em 0 rgba(255, 255, 255, 0.25), 
+  0 0.4em 1.25em 0 rgba(255, 255, 255, 0.15) !important;
+  padding: 2em 3em !important;
+  background-color: transparent;
+}
+
+.timeline .date{
+  color: white
+}
+
+.timeline #description{
+  margin: 1.5em 0 2em 0;
+}
+
+.timeline .button{
+  text-decoration: none;
+  padding: 0.5em 1em;
+  border-radius: 5px;
+  color: white;
+}
+
+.timeline .vertical-timeline-element-icon{
+  background: white !important;
+}
+
+.timeline .workButton{
+  background-color: rgb(170, 54, 124, 0.5);
+}
+
+.timeline .workButton:hover{
+  background-color: rgba(74, 47, 189, 0.5);
+}
+
+.timeline .schoolButton{
+  background-color: rgb(170, 54, 124, 0.5);
+}
+
+.timeline .schoolButton:hover{
+  background-color: rgba(74, 47, 189, 0.5);
+}
+
+/* @media only screen and (max-width: 1700px){
+  .timeline .vertical-timeline-element-date{
+    display: block !important;
+    float: none !important;
+    color: white;
+    margin-top: 1.5em;
+  }
+} */
+
+.vertical-timeline-element-content{
+  animate: true;
 }
 
 /************ Skills Css ************/
