@@ -1,15 +1,20 @@
 import { Container, Row, Col, Tab, Nav } from "react-bootstrap";
 import { ProjectCard } from "./ProjectCard";
-import projImg1 from "../assets/img/ritz_dark_05.jpg";
+import projImg1 from "../assets/img/eraser.jpeg";
 import projImg2 from "../assets/img/newspaper.png";
-import projImg3 from "../assets/img/project-img3.png";
+import projImg3 from "../assets/img/AP-Psychology.jpg";
+import projImg4 from "../assets/img/studyabroad.jpg";
+import projImg5 from "../assets/img/ipave.jpg";
+import projImg6 from "../assets/img/robosub.jpg";
+import projImg7 from "../assets/img/headroycegps.png";
+import projImg8 from "../assets/img/chaboicaters.png";
 import colorSharp2 from "../assets/img/color-sharp2.png";
 import 'animate.css';
 import TrackVisibility from 'react-on-screen';
 
 export const Projects = () => {
 
-  const projects = [
+  const work = [
     {
       title: "Ritz Deli Games Internship",
       description: "Data Science & Product Development",
@@ -24,6 +29,37 @@ export const Projects = () => {
       title: "ATDP Teaching Assistant",
       description: "Facilitation & Mentorship",
       imgUrl: projImg3,
+    },
+  ];
+
+  const projects = [
+    {
+      title: "High School Campus GPS App",
+      description: "Android App Development and Google Maps API",
+      imgUrl: projImg7,
+    },
+    {
+      title: "Lunch Ordering System",
+      description: "Web Development and SQL Database",
+      imgUrl: projImg8,
+    },
+  ];
+
+  const experiential = [
+    {
+      title: "Study Abroad in Dublin, Ireland",
+      description: "Global Perspective and Intercultural Communication",
+      imgUrl: projImg4,
+    },
+    {
+      title: "In-Person Away Virtual Events Software Engineer",
+      description: "Multidisciplinary Collaboration and Robotics",
+      imgUrl: projImg5,
+    },
+    {
+      title: "Michigan Robotic Submarine Project Team",
+      description: "Computer Vision and Robotics",
+      imgUrl: projImg6,
     },
   ];
 
@@ -43,7 +79,7 @@ export const Projects = () => {
                       <Nav.Link eventKey="first">Work</Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
-                      <Nav.Link eventKey="second">Personal Projects</Nav.Link>
+                      <Nav.Link eventKey="second">Projects</Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
                       <Nav.Link eventKey="third">Experiential Learning</Nav.Link>
@@ -52,6 +88,20 @@ export const Projects = () => {
                   <Tab.Content id="slideInUp" className={isVisible ? "animate__animated animate__slideInUp" : ""}>
                     <Tab.Pane eventKey="first">
                       <Row>
+                        {
+                          work.map((project, index) => {
+                            return (
+                              <ProjectCard
+                                key={index}
+                                {...project}
+                                />
+                            )
+                          })
+                        }
+                      </Row>
+                    </Tab.Pane>
+                    <Tab.Pane eventKey="second">
+                    <Row>
                         {
                           projects.map((project, index) => {
                             return (
@@ -64,11 +114,19 @@ export const Projects = () => {
                         }
                       </Row>
                     </Tab.Pane>
-                    <Tab.Pane eventKey="second">
-                      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque quam, quod neque provident velit, rem explicabo excepturi id illo molestiae blanditiis, eligendi dicta officiis asperiores delectus quasi inventore debitis quo.</p>
-                    </Tab.Pane>
                     <Tab.Pane eventKey="third">
-                      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque quam, quod neque provident velit, rem explicabo excepturi id illo molestiae blanditiis, eligendi dicta officiis asperiores delectus quasi inventore debitis quo.</p>
+                    <Row>
+                        {
+                          experiential.map((project, index) => {
+                            return (
+                              <ProjectCard
+                                key={index}
+                                {...project}
+                                />
+                            )
+                          })
+                        }
+                      </Row>
                     </Tab.Pane>
                   </Tab.Content>
                 </Tab.Container>
