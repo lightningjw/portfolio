@@ -8,6 +8,8 @@ import projImg5 from "../assets/img/ipave.jpg";
 import projImg6 from "../assets/img/robosub.jpg";
 import projImg7 from "../assets/img/headroycegps.png";
 import projImg8 from "../assets/img/chaboicaters.png";
+import projImg9 from "../assets/img/quadcopter.png";
+import projImg10 from "../assets/img/functionfinderimg.png";
 import colorSharp2 from "../assets/img/color-sharp2.png";
 import 'animate.css';
 import TrackVisibility from 'react-on-screen';
@@ -33,6 +35,16 @@ export const Projects = () => {
   ];
 
   const projects = [
+    {
+      title: "FunctionFinder: Party Social Media iOS App",
+      description: "Swift iOS Development with Firebase and GoogleMaps/GooglePlaces API",
+      imgUrl: projImg10,
+    },
+    {
+      title: "Automated Reforestation Autonomous Drone Application",
+      description: "Autonomous Vehicles and Unreal Engine in Python",
+      imgUrl: projImg9,
+    },
     {
       title: "High School Campus GPS App",
       description: "Android App Development and Google Maps API",
