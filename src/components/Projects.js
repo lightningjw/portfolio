@@ -10,6 +10,9 @@ import projImg7 from "../assets/img/headroycegps.png";
 import projImg8 from "../assets/img/chaboicaters.png";
 import projImg9 from "../assets/img/quadcopter.png";
 import projImg10 from "../assets/img/functionfinderimg.png";
+import projImg11 from "../assets/img/montana.jpg";
+import projImg12 from "../assets/img/landmarklocator.png";
+import projImg13 from "../assets/img/cinemasentinel.webp";
 import colorSharp2 from "../assets/img/color-sharp2.png";
 import 'animate.css';
 import TrackVisibility from 'react-on-screen';
@@ -17,6 +20,11 @@ import TrackVisibility from 'react-on-screen';
 export const Projects = () => {
 
   const work = [
+    {
+      title: "In-Person Away Virtual Events Software Engineer",
+      description: "Project Management and Robotics",
+      imgUrl: projImg5,
+    },
     {
       title: "Ritz Deli Games Internship",
       description: "Data Science & Product Development",
@@ -41,6 +49,16 @@ export const Projects = () => {
       imgUrl: projImg10,
     },
     {
+      title: "LandmarkLocator: Landmark Identification Convolutional Neural Network",
+      description: "Computer Vision",
+      imgUrl: projImg12,
+    },
+    {
+      title: "CinemaSentinel: Film Critique Classification Machine Learning Model",
+      description: "Support Vector Machines and Sentiment Analysis",
+      imgUrl: projImg13,
+    },
+    {
       title: "Automated Reforestation Autonomous Drone Application",
       description: "Autonomous Vehicles and Unreal Engine in Python",
       imgUrl: projImg9,
@@ -59,20 +77,20 @@ export const Projects = () => {
 
   const experiential = [
     {
+      title: "Michigan Robotic Submarine Project Team",
+      description: "Computer Vision and Robotics",
+      imgUrl: projImg6,
+    },
+    {
       title: "Study Abroad in Dublin, Ireland",
       description: "Global Perspective and Intercultural Communication",
       imgUrl: projImg4,
     },
     {
-      title: "In-Person Away Virtual Events Software Engineer",
-      description: "Multidisciplinary Collaboration and Robotics",
-      imgUrl: projImg5,
-    },
-    {
-      title: "Michigan Robotic Submarine Project Team",
-      description: "Computer Vision and Robotics",
-      imgUrl: projImg6,
-    },
+      title: "Volunteer Abroad on Blackfeet Reservation",
+      description: "Volunteering and Cultural Empathy",
+      imgUrl: projImg11,
+    }
   ];
 
   return (
