@@ -144,7 +144,7 @@
   --size-court-stroke: 1.5px;
   --size-divider: 96px;
   --size-divider-baseline: 32px;
-  --size-header-band: 128px;
+  --size-header-band: 96px;
 
   /* Typography steps */
   --type-display-xl-size: clamp(2.75rem, 1.2rem + 6.2vw, 5.5rem);

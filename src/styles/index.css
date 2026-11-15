@@ -261,3 +261,71 @@
     animation-delay: var(--hero-beat-5);
   }
 }
+
+/* A link whose hit area and focus ring cover its positioned ancestor (the card). */
+@utility stretched-link {
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius-plate);
+  }
+
+  &:focus-visible {
+    outline: none;
+  }
+
+  &:focus-visible::after {
+    outline: var(--size-ring) solid var(--color-gold);
+    outline-offset: var(--size-ring-offset);
+  }
+}
+
+/* Box score card: text, then tile, then link. From 768 the tile sits to the right. */
+@utility card-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: 'text' 'tile' 'link';
+
+  @variant md {
+    grid-template-columns: minmax(0, 1fr) var(--size-tile-md);
+    grid-template-rows: 1fr auto;
+    grid-template-areas: 'text tile' 'link tile';
+    column-gap: var(--spacing-6);
+  }
+}
+
+@utility area-text {
+  grid-area: text;
+}
+
+@utility area-tile {
+  grid-area: tile;
+}
+
+@utility area-link {
+  grid-area: link;
+}
+
+/* One character of a stat: a fixed-width plate with the glyph centred. */
+@utility plate {
+  display: inline-flex;
+  width: var(--size-plate-digit);
+  justify-content: center;
+  padding-block: var(--size-plate-pad);
+  border-radius: var(--radius-plate);
+  background-color: var(--color-board-raised);
+  /* Keeps an empty plate the height of a lettered one. */
+  &::before {
+    content: '\200b';
+  }
+}
+
+@utility plate-point {
+  width: var(--size-plate-point);
+}
+
+@utility plate-row {
+  display: inline-flex;
+  gap: var(--size-plate-gap);
+}
