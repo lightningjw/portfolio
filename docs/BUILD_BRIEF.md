@@ -19,21 +19,21 @@ Remove: bootstrap, react-bootstrap, animate.css, the carousel libraries, react-o
 
 ## Design direction
 The sports theme (soccer, basketball, baseball) comes through data and field geometry, not mascots, stock photos, emoji or clip-art balls.
-- **Hero:** one signature animation built from sports data, e.g. an SVG shot chart that plots in, pitch trajectories drawn as path animations, or a soccer pass network forming. Use real output from one of my projects if one has suitable data; otherwise a clearly representative sample.
+- **Hero:** one signature animation built from sports data: an SVG shot chart on a FIBA half court, hex-binned from the BSN Shot Outcome Prediction project's shot attempts, with the court lines drawn in and the bins plotting in. Source the data from my `lightningjw/Guaynabo-Mets-Reports` repo, which holds my Mets de Guaynabo work and the shot-chart visualization. Rebuild the chart in the portfolio's own design system from that data; don't copy the original figure or its styling. Aggregate BSN and SynergySports data is cleared to show publicly; no shot-level or player-level rows on the site.
 - **Field markings:** the structural motif. Thin chalk-line SVG details (pitch arcs, court key, base paths) as section dividers and backgrounds, subtle and low-contrast.
 - **Project cards as "box scores":** each leads with the sport, the question asked, the method/model and one headline result metric, set in tabular numerals.
-- **Sport filter:** All / Soccer / Basketball / Baseball, with an animated layout transition.
+- **Sport filter:** All / Baseball / Basketball / Motorsport / Core ML, with an animated layout transition. The list follows the projects in PORTFOLIO_BRIEF.md; a category with no projects is not shown.
 - **Palette:** warm and earthy, not neon or esports. Hardwood, leather, turf, chalk, with a yellow-gold accent. A dark default is fine if it serves the palette.
 - **Type:** one confident display face for headings, a clean sans for body, tabular figures for stats. Drop the Centra font files unless there's a strong reason to keep them.
 
 ## Motion rules
 - One showpiece (the hero). Everything else is quiet: fast entrances, real press/hover feedback, a shared-layout transition for the sport filter.
-- Animate transform and opacity only. Hold 60fps on a mid-range phone.
+- Animate transform and opacity only, with one exception: the hero may stroke-draw its court lines. The hex bins and everything outside the hero stay on transform and opacity. Hold 60fps on a mid-range phone.
 - Full prefers-reduced-motion support: the hero renders its final state statically.
 - No typing-text effect, no scroll-jacking, nothing that delays reading content.
 
 ## Content
-PORTFOLIO_BRIEF.md is the source of truth for all copy. Don't invent metrics or projects. Carry every TODO from the brief into the site as a visible placeholder, and list them in the PR description.
+PORTFOLIO_BRIEF.md is the source of truth for all copy. Don't invent metrics or projects. TODO fields from the brief show as visible placeholders in development and PR preview builds only. On the deployed site the TODO text is hidden: a missing link hides its button, and a missing headline result shows as a blank tile. List every open TODO in the PR description.
 Sections: Hero, Projects, About, Experience, Skills (compact grouped list, no progress meters), Contact.
 
 ## Phase plan (one chat per phase)
