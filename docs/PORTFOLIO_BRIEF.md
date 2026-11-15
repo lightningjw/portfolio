@@ -46,6 +46,8 @@ Content source for the rebuild of Justin Wong's personal portfolio site. Everyth
 
 Order is intentional: baseball first, then other sports, then the one non-sports ML project.
 
+Each project has two card-only fields for the box score card (see DESIGN.md). **Card method line** is a one-line form of Method. **Card tile** is the single value on the result tile, then its unit, then the descriptor under it. Both are derived from the fields above them and add no new facts.
+
 ### 3.1 MLB Player OPS Forecasting
 
 - **Sport:** Baseball
@@ -53,6 +55,8 @@ Order is intentional: baseball first, then other sports, then the one non-sports
 - **Data:** Lahman database historical MLB batting data, plus team offensive efficiency (runs per game) lagged one and two years, and age adjustments. 
 - **Method:** Random Forest regression in R (randomForest, dplyr, tidyverse, RSQLite), 70/30 train/test split, evaluated on mean squared error against the MARCEL benchmark. The lagged team runs-per-game feature separates player skill from the offensive context around him.
 - **Headline result:** 9% lower mean squared error than MARCEL.
+- **Card method line:** Random Forest regression in R with a lagged team run environment feature, tested against MARCEL.
+- **Card tile:** 9 % · Lower mean squared error than MARCEL
 - **Link:** TODO: repo or write-up URL.
 - **Why it matters to a team:** Projection systems sit underneath trade, free-agency and roster decisions, and a model that beats a standard public baseline with transparent, explainable features is the kind of foundation an analytics group can extend.
 
@@ -63,6 +67,8 @@ Order is intentional: baseball first, then other sports, then the one non-sports
 - **Data:** Physical and developmental attributes (height, weight, handedness, draft position, debut age, amateur path, speed grade) from Baseball Reference; Statcast metrics from Baseball Savant via pybaseball; FanGraphs leaderboards; Baseball America scouting grades.
 - **Method:** K-means and hierarchical clustering on stat-independent physical attributes (silhouette analysis to choose K, PCA to visualize) to find his nearest physical comps; Statcast comparison against those comps across exit velocity, barrel rate, xwOBA, K%, BB% and chase rate; development-arc trajectories and bootstrap confidence intervals. Before finalizing, he caught that pybaseball's pitch-level exit velocity and xwOBA conflicted with Baseball Savant's published figures and corrected the analysis to the published numbers.
 - **Headline result:** Nearest physical comps were James Wood, Aaron Judge, Matt Olson, Yordan Alvarez and Ryan Mountcastle. In his 37-PA 2025 debut, Eldridge's contact quality (95.6 mph average exit velocity, .362 xwOBA) already matched or exceeded those comps, while his 35.1% strikeout rate was driven by in-zone misses rather than chasing (chase rate about 17%). That isolates in-zone contact as the development variable that decides his ceiling.
+- **Card method line:** K-means and hierarchical clustering to find physical comps, then a Statcast comparison with bootstrap confidence intervals.
+- **Card tile:** 95.6 MPH · Avg exit velocity, 37-PA debut
 - **Link:** TODO: repo or notebook URL.
 - **Why it matters to a team:** It shows how to evaluate a player when the sample is too small to trust, by combining physical-archetype comps with process metrics, and it shows the habit of reconciling data sources before a number reaches a decision-maker.
 
@@ -73,6 +79,8 @@ Order is intentional: baseball first, then other sports, then the one non-sports
 - **Data:** A curated dataset of about 1,400 baseball play descriptions. TODO: where the play-by-play text came from.
 - **Method:** Weak supervision: rule-based labeling to generate training labels, then fine-tuned DistilBERT (Python, PyTorch, Hugging Face Transformers, pandas).
 - **Headline result:** 15-point accuracy improvement over the rule-based baseline. TODO: absolute accuracy, if Justin wants it shown.
+- **Card method line:** Weak supervision: rule-based labels, then a fine-tuned DistilBERT classifier.
+- **Card tile:** 15 PTS · Accuracy gain over the rule-based baseline
 - **Link:** TODO: repo URL.
 - **Why it matters to a team:** A lot of baseball information still lives in text, and a cheap labeling pipeline turns it into structured, queryable data without weeks of manual tagging.
 
@@ -83,6 +91,8 @@ Order is intentional: baseball first, then other sports, then the one non-sports
 - **Data:** SynergySports API data combined with web-scraped BSN play-by-play; 34K+ shot attempts after cleaning, processed through a Python ETL pipeline into MySQL.
 - **Method:** Engineered features for game clock (plus a quadratic clock term for late-game pressure), zone defense, situational flags (after timeout, sideline and baseline out-of-bounds), shot type, home/away, and one-hot shooter and defender identities. Logistic regression as an interpretable baseline, compared against random forest, KNN, naive Bayes and a neural network, tuned with GridSearchCV. Logistic regression won.
 - **Headline result:** 64.7% cross-validated accuracy, 11 percentage points above a baseline using only zone defense and game quarter, with a minimal train/test gap. The ETL pipeline cut processing time by 90%. Results reached coaches through an R Shiny dashboard used for game strategy and scouting.
+- **Card method line:** Logistic regression on engineered game-context features, compared against four other models.
+- **Card tile:** 64.7 % · Cross-validated accuracy
 - **Link:** https://lightningjw.github.io/bsn-pbp-analysis/
 - **Why it matters to a team:** It is the complete loop an analytics department runs every day: messy multi-source event data, a model tested against simpler alternatives, and output delivered in a form coaches actually used.
 
@@ -93,6 +103,8 @@ Order is intentional: baseball first, then other sports, then the one non-sports
 - **Data:** TODO: image source and dataset size.
 - **Method:** A preprocessing pipeline that cleaned corrupted files and rebalanced classes, then a comparison of shallow CNNs, vision transformers and a pre-trained ResNet-50 (Python, PyTorch).
 - **Headline result:** 96% validation accuracy with ResNet-50, outperforming shallow CNNs and vision transformers on limited data.
+- **Card method line:** Transfer learning with a pre-trained ResNet-50, compared against shallow CNNs and vision transformers.
+- **Card tile:** 96 % · Validation accuracy with ResNet-50
 - **Link:** TODO: repo URL.
 - **Why it matters to a team:** Video and image data is a growing source of player and game information, and this shows how to get a strong vision model out of a small labeled set through transfer learning and careful data cleaning.
 
@@ -103,6 +115,8 @@ Order is intentional: baseball first, then other sports, then the one non-sports
 - **Data:** A 1B-token text corpus. TODO: corpus name.
 - **Method:** Decoder-only transformer with multi-head self-attention and causal masking, GPU-accelerated training, reproducible training pipelines with Weights & Biases experiment tracking and hyperparameter tuning, benchmarked on instruction following (Python, PyTorch).
 - **Headline result:** TODO: a result to show (for example, a benchmark score or loss), or leave this field out.
+- **Card method line:** Decoder-only transformer built from scratch in PyTorch, pretrained then fine-tuned.
+- **Card tile:** blank until the headline result TODO is filled
 - **Link:** TODO: repo URL.
 - **Why it matters to a team:** Sequence models are a natural fit for pitch sequences and possessions, and building one from the ground up means understanding the model well enough to debug and adapt it rather than treating it as a black box.
 
