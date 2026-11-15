@@ -1,4 +1,5 @@
 import { MotionConfig } from 'motion/react';
+import { About } from './components/About';
 import { Hero } from './components/Hero';
 import { Nav } from './components/Nav';
 import { Projects } from './components/Projects';
@@ -17,6 +18,7 @@ export function App() {
       <main id="main" className="flex flex-col gap-16 pt-12 pb-16 md:gap-24 md:pb-24">
         <Hero />
         <Projects />
+        <About />
       </main>
     </MotionConfig>
   );

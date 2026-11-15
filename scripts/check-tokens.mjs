@@ -2,7 +2,8 @@
 // Fails if a component reaches around the design tokens.
 // Tokens live in src/styles/tokens.css. Everything under src/ except that
 // file must be free of raw hex colours, Tailwind arbitrary values and
-// literal px / ms / rem sizes.
+// literal px / ms / rem sizes. A line can opt out with a "tokens-ok: reason"
+// comment where a platform API cannot read a CSS variable.
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
 
@@ -28,6 +29,7 @@ for (const file of walk(ROOT)) {
   readFileSync(file, 'utf8')
     .split('\n')
     .forEach((line, i) => {
+      if (line.includes('tokens-ok:')) return;
       for (const { name, re } of RULES) {
         for (const match of line.matchAll(re)) {
           problems.push(`${rel}:${i + 1}  ${name}: ${match[0]}`);
