@@ -146,6 +146,13 @@
   stroke-linecap: round;
   stroke-linejoin: round;
   vector-effect: non-scaling-stroke;
+
+  /* pathLength dashes need a scaling stroke, so while the hero sequence
+     runs the width comes from the measured scale instead. */
+  [data-hero] & {
+    vector-effect: none;
+    stroke-width: calc(var(--size-court-stroke) / var(--court-scale, 1));
+  }
 }
 
 /*
@@ -207,7 +214,8 @@
   [data-hero] [data-beat='1'],
   [data-hero] [data-beat='2'],
   [data-hero] [data-beat='3'] {
-    stroke-dasharray: 1;
+    /* Gap longer than the path, so no round cap shows at the far end. */
+    stroke-dasharray: 1 2;
     animation-name: hero-draw;
     animation-duration: var(--duration-draw);
     animation-timing-function: var(--ease-draw);
