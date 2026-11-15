@@ -34,6 +34,15 @@ Content source for the rebuild of Justin Wong's personal portfolio site. Everyth
 
 > Sports analytics and machine learning, from raw data to decision.
 
+### 1.1 Hero chart caption
+
+The hero is a binned shot chart. Its facts come from the shot-location file, not from project 3.4.
+
+- **Data:** 20,716 shot attempts by all 12 BSN teams, games from 3 April to 6 June 2024, scraped by Justin.
+- **Caption:** BSN 2024. 20,716 shot attempts, all 12 teams. Colour shows points per shot, size shows volume.
+- **Source credit:** TODO: name of the site the shot locations were scraped from.
+- Do not caption the chart with the 34K+ figure. That number describes the model's training data in project 3.4.
+
 ---
 
 ## 2. Bio

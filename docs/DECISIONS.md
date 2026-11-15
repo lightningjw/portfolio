@@ -27,4 +27,6 @@ Append one line per decision: date, decision, short reason. Newest at the bottom
 - 2026-11-15: Eldridge card tile is 95.6 MPH, descriptor "Avg exit velocity, 37-PA debut". Reason: fastest-stabilizing metric at that sample, legible to non-baseball readers, and the figure reconciled to Baseball Savant.
 - 2026-11-15: Each project in PORTFOLIO_BRIEF.md gets a Card method line and a Card tile field, derived from its Method and Headline result.
 - 2026-11-15: Fonts verified. Use the Archivo file with both wght and wdth axes. Big Shoulders Display has no tabular figures, so its numerals are aligned by plates only.
-- 2026-11-15: OPEN, needs a decision: Guaynabo-Mets-Reports has no shot coordinates (shot type and point value only; the existing shot chart script uses synthetic positions). The hex-binned hero logged above cannot be built from it without inventing data.
+- 2026-11-15: Hero data is the scraped BSN shot-location file (20,716 shots, 12 teams, games from 3 April to 6 June 2024), not Guaynabo-Mets-Reports, which has no shot coordinates. The raw file is never committed; only src/data/heroShotBins.json (bin totals, built by scripts/build_shot_bins.py) is public.
+- 2026-11-15: Hero bins are 0.5m hexagons with a 10-attempt minimum (194 bins). Colour is points per shot in five fixed classes; size is attempts on a square-root scale capped at 310.
+- 2026-11-15: Hero caption uses the shot-location file's own counts, not the 34K+ figure, which belongs to the model's training data.

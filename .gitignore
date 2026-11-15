@@ -24,3 +24,6 @@ yarn-error.log*
 
 # environment variables
 .env
+
+# Raw scraped shot data names players. Only aggregated bins are committed.
+team_shots*.csv

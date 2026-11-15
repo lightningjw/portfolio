@@ -218,7 +218,7 @@ Sequential, monotonic in lightness, read against the `board-deep` chart plate. I
 | `bin-4` | `#C9AE3F` | 8.21 |
 | `bin-5` | `#F2B632` | 9.84 |
 
-`bin-1` is below 3:1 on purpose: it is the quietest class and is always paired with size (bin size carries volume), so no information lives in `bin-1` colour alone. The ramp is only usable if the hero data blocker below is resolved in favour of a binned chart.
+`bin-1` is below 3:1 on purpose: it is the quietest class and is always paired with size (bin size carries volume), so no information lives in `bin-1` colour alone. The ramp encodes points per shot in five fixed classes. See Hero for the class bounds.
 
 ### Contrast: every text pair
 
@@ -379,9 +379,15 @@ Never:
 
 ### Hero
 
-> **Open blocker, found 2026-11-15. Do not build the chart until this is resolved.** The play-by-play files in `Guaynabo-Mets-Reports` (all five BSN seasons) carry no shot coordinates. The shot field is a shot type only (Jumper, Layup, Dunk, Floater/Runner, Hook Shot, Tip Shot), plus 2 or 3 point value in the play string. The existing `shot_chart_profile.R` draws random uniform coordinates and titles itself a synthetic example. A hex-binned shot chart built from this repo would be invented data, which the project rules forbid. The hero as logged in DECISIONS.md needs either real shot-location data or an amended decision. Everything below that mentions bins is conditional on that.
+Data (resolved 2026-11-15): the chart reads `src/data/heroShotBins.json`, built by `scripts/build_shot_bins.py` from scraped BSN shot locations. The source is 20,716 shot attempts by all 12 BSN teams in games from 3 April to 6 June 2024. The raw file names players and is never committed; only bin totals are public.
 
-Anatomy, in DOM order: h1 (the headline from PORTFOLIO_BRIEF.md section 1, `display-xl`, chalk); a button row (primary "View projects", secondary "Get in touch"); the chart figure. The figure is a `board-deep` recessed slot holding the SVG half court, and under it a caption row in `label-s`: the legend (five ramp swatches with low and high labels, plus a size key if size is encoded) and a one-line source caption built only from facts in the brief (league, team, 34K+ shot attempts). Half court proportions are fixed at FIBA regulation: viewBox 150 by 140 (15m wide, 14m deep, 1 unit is 10cm).
+- **Bins:** pointy-top hexagons, 0.5m circumradius, positions in metres on the FIBA half court. A bin needs at least 10 attempts to be drawn. That gives 194 bins holding 20,399 shots. 30 shots from beyond half court are dropped, and 287 fall in bins under the threshold.
+- **Colour is points per shot** (points scored divided by attempts in the bin), not field goal percentage, so twos and threes are comparable. Five fixed classes on the ramp: below 0.70, 0.70 to 0.85, 0.85 to 1.00, 1.00 to 1.15, 1.15 and above. The bins split 35 / 45 / 41 / 34 / 39 across them.
+- **Size is volume:** hexagon scale is `0.35 + 0.65 * sqrt(min(att, 310) / 310)` of the full cell. 310 attempts is the 95th percentile bin, so the few bins at the rim (up to 2,058 attempts) do not flatten everything else.
+- **Legend:** five swatches labelled with the class bounds and the words "points per shot", plus a small and a large hexagon labelled "fewer shots" and "more shots".
+- **Caption:** league, season, team count and shot count, taken from the JSON `meta` block. It does not use the 34K+ figure from the project copy, which describes a different dataset (the model's training data).
+
+Anatomy, in DOM order: h1 (the headline from PORTFOLIO_BRIEF.md section 1, `display-xl`, chalk); a button row (primary "View projects", secondary "Get in touch"); the chart figure. The figure is a `board-deep` recessed slot holding the SVG half court, and under it a caption row in `label-s`: the legend (five ramp swatches with low and high labels, plus a size key if size is encoded) and a one-line source caption (see Data below). Half court proportions are fixed at FIBA regulation: viewBox 150 by 140 (15m wide, 14m deep, 1 unit is 10cm).
 
 Layout: stacked below 1024 with the chart full width under the buttons. From 1024, text spans 5 columns and the chart 7, top-aligned. The h1 is never overlaid on the chart.
 
@@ -541,7 +547,7 @@ Runs once per page load, starting when the page is visible. Total 1,800ms. The h
 Constraints:
 
 - Court lines use `pathLength="1"` so every stroke shares one dash setup. Lines are `court-line`, 1.5px, `vector-effect: non-scaling-stroke`, round caps.
-- Bins are grouped per ring in the SVG (8 `g` elements) and capped at 200 bins total, so the stagger is 8 timers, not 200.
+- Bins are grouped per ring in the SVG (8 `g` elements) by distance from the rim, so the stagger is 8 timers, not 194. The cap is 200 bins; if the data is rebuilt and exceeds it, raise the minimum attempts, not the cap.
 - Performance gate (Phase 6): on a mid-range phone profile (4x CPU throttle), beat 4 must hold 60fps. If it does not, drop the per-bin scale and keep ring opacity only. Do not move the chart to canvas.
 - If the tab is hidden at load, the sequence waits for visibility. If the user scrolls past before it ends, it finishes anyway and is never replayed.
 - With JavaScript disabled or failed, the chart renders in its final state. The initial hidden state is applied by script, not by default CSS.
