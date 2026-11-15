@@ -1,5 +1,6 @@
 import { MotionConfig } from 'motion/react';
 import { About } from './components/About';
+import { Experience } from './components/Experience';
 import { Hero } from './components/Hero';
 import { Nav } from './components/Nav';
 import { Projects } from './components/Projects';
@@ -19,6 +20,7 @@ export function App() {
         <Hero />
         <Projects />
         <About />
+        <Experience />
       </main>
     </MotionConfig>
   );

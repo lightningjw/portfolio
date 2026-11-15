@@ -41,3 +41,57 @@ export function Diamond() {
     </svg>
   );
 }
+
+// FIBA court, in viewBox units of 10cm: 15m wide, centre circle radius 1.8m,
+// key 4.9m wide, three-point corner lines 0.9m in from each sideline.
+const COURT_WIDTH = 150;
+const CENTRE_RADIUS = 18;
+const KEY_HALF_WIDTH = 24.5;
+const CORNER_INSET = 9;
+/** Depth of court shown above the baseline before the band crops it. */
+const BASELINE_BAND = 14;
+const BASELINE_Y = BASELINE_BAND;
+const BASELINE_TICKS = [
+  0,
+  CORNER_INSET,
+  COURT_WIDTH / 2 - KEY_HALF_WIDTH,
+  COURT_WIDTH / 2 + KEY_HALF_WIDTH,
+  COURT_WIDTH - CORNER_INSET,
+  COURT_WIDTH,
+];
+
+/** Halfway line and centre circle, cropped by the band. Divider between About and Experience. */
+export function CentreCircle() {
+  return (
+    <svg
+      viewBox={`0 ${-CENTRE_RADIUS} ${COURT_WIDTH} ${2 * CENTRE_RADIUS}`}
+      preserveAspectRatio="xMidYMid slice"
+      aria-hidden="true"
+      className="pointer-events-none block h-(--size-divider) w-full"
+    >
+      <path d={`M0 0H${COURT_WIDTH}`} className="marking stroke-chalk-line-divider" />
+      <circle cx={COURT_WIDTH / 2} cy={0} r={CENTRE_RADIUS} className="marking stroke-chalk-line-divider" />
+    </svg>
+  );
+}
+
+/**
+ * Court baseline. The marks along it are the real lines that meet a baseline
+ * (sidelines, three-point corner lines, key), cropped by the band.
+ * Divider above Contact.
+ */
+export function Baseline() {
+  return (
+    <svg
+      viewBox={`0 0 ${COURT_WIDTH} ${BASELINE_BAND + 0.5}`}
+      preserveAspectRatio="xMidYMax slice"
+      aria-hidden="true"
+      className="pointer-events-none block h-(--size-divider-baseline) w-full"
+    >
+      <path d={`M0 ${BASELINE_Y}H${COURT_WIDTH}`} className="marking stroke-chalk-line-divider" />
+      {BASELINE_TICKS.map((x) => (
+        <path key={x} d={`M${x} ${BASELINE_Y}V0`} className="marking stroke-chalk-line-divider" />
+      ))}
+    </svg>
+  );
+}

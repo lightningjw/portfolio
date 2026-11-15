@@ -329,3 +329,19 @@
   display: inline-flex;
   gap: var(--size-plate-gap);
 }
+
+/* List item with a square chalk-dim marker, centred on the first line. */
+@utility bullet {
+  position: relative;
+  padding-left: var(--spacing-4);
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: calc((1lh - var(--size-marker)) / 2);
+    width: var(--size-marker);
+    height: var(--size-marker);
+    background-color: var(--color-chalk-dim);
+  }
+}
