@@ -4,7 +4,7 @@ Content source for the rebuild of Justin Wong's personal portfolio site. Everyth
 
 **Rules for the builder**
 
-- Any field marked `TODO:` is unconfirmed. Do not render the TODO text on the live site. Omit that field (for example, hide the "View repo" button) until Justin fills it in.
+- Any field marked `TODO:` is unconfirmed. Do not render the TODO text on the live site. Omit that field (for example, hide the "View repo" button) until Justin fills it in. A missing headline result shows as a blank tile on its card. Development and PR preview builds may show TODO placeholders.
 - Write in first person, plainly. No em dashes anywhere in site copy (Justin doesn't use them). No hype words ("passionate", "cutting-edge", "rockstar").
 - Never name a specific team, company or posting Justin applied to. The site speaks to the whole role family below.
 - Design direction (from Justin): modern, sports-themed, with sports animations. The existing site lives in the GitHub repo `lightningjw/portfolio` and is served at `lightningjw.github.io/portfolio/`.
@@ -38,7 +38,7 @@ Content source for the rebuild of Justin Wong's personal portfolio site. Everyth
 
 ## 2. Bio
 
-> I'm a Data Engineer at Abbott, and I hold a BS in Computer Science and an MS in Data Science from the University of Michigan. Outside the day job I build sports analytics and machine learning projects, with baseball at the center: projection models, player evaluation, and the data pipelines underneath them. I also did lead data analysis for the Mets de Guaynabo, a professional basketball team in Puerto Rico's BSN league.
+> I'm a Data Engineer at Abbott, and I hold a BSE in Computer Science and an MS in Data Science from the University of Michigan. Outside the day job I build sports analytics and machine learning projects, with baseball at the center: projection models, player evaluation, and the data pipelines underneath them. I also did lead data analysis for the Mets de Guaynabo, a professional basketball team in Puerto Rico's BSN league.
 
 ---
 
