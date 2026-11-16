@@ -24,8 +24,10 @@ export function Projects() {
   );
   /** With fewer than two categories there is nothing to filter. */
   const showFilter = activeSports.length >= 2;
-  const activeSport = activeSports.find((sport) => sport.id === selected);
-  const filter = selected;
+  // A selection whose category has no plate falls back to All, so the grid
+  // can never sit empty behind a filter that is not on screen.
+  const activeSport = showFilter ? activeSports.find((sport) => sport.id === selected) : undefined;
+  const filter: FilterValue = activeSport?.id ?? 'all';
   // Filtering removes cards. The rest keep the order from the brief.
   const shown = filter === 'all' ? projects : projects.filter((project) => project.sport === filter);
 
