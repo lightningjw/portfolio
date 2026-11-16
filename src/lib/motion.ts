@@ -14,14 +14,14 @@ export interface MotionTokens {
   fast: number;
   base: number;
   layout: number;
+  /** First gap between staggered items, and how much each later gap shrinks. */
   staggerSection: number;
+  staggerSectionDecay: number;
   staggerSectionMax: number;
   /** Pixels. */
   enter: number;
-  radiusControl: number;
   easeOut: Bezier;
   easeInOut: Bezier;
-  easeIn: Bezier;
 }
 
 const LINEAR: Bezier = [0, 0, 1, 1];
@@ -61,12 +61,11 @@ export function motionTokens(): MotionTokens {
     base: seconds('--duration-base'),
     layout: seconds('--duration-layout'),
     staggerSection: seconds('--stagger-section'),
+    staggerSectionDecay: seconds('--stagger-section-decay'),
     staggerSectionMax: number('--stagger-section-max'),
     enter: number('--distance-enter'),
-    radiusControl: number('--radius-control'),
     easeOut: bezier('--ease-out'),
     easeInOut: bezier('--ease-in-out'),
-    easeIn: bezier('--ease-in'),
   };
   return cached;
 }
@@ -83,6 +82,6 @@ export function useMotionTokens(): MotionTokens {
   const reduced = useReducedMotion();
   return useMemo(() => {
     const tokens = motionTokens();
-    return reduced ? { ...tokens, fast: 0, base: 0, layout: 0, staggerSection: 0, enter: 0 } : tokens;
+    return reduced ? { ...tokens, fast: 0, base: 0, layout: 0, staggerSection: 0, staggerSectionDecay: 0, enter: 0 } : tokens;
   }, [reduced]);
 }

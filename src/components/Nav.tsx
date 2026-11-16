@@ -121,7 +121,7 @@ export function Nav() {
               closed: (instant: boolean) => ({
                 opacity: 0,
                 y: -tokens.enter,
-                transition: { duration: instant ? 0 : tokens.fast, ease: tokens.easeIn },
+                transition: { duration: instant ? 0 : tokens.fast, ease: tokens.easeOut },
               }),
             }}
             initial="closed"

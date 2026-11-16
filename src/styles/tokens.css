@@ -183,24 +183,23 @@
   --type-label-width: 'wdth' 88;
 
   /* Motion */
-  --duration-press: 80ms;
+  --duration-press: 160ms;
   --duration-fast: 140ms;
   --duration-base: 220ms;
   --duration-layout: 260ms;
   --duration-draw: 600ms;
   --duration-bin: 240ms;
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
   --ease-draw: cubic-bezier(0.33, 1, 0.68, 1);
-  --ease-in: cubic-bezier(0.5, 0, 0.75, 0);
-  --stagger-section: 40ms;
+  /* First gap between section items; each later gap is shorter by the decay. */
+  --stagger-section: 50ms;
+  --stagger-section-decay: 10ms;
   --stagger-section-max: 5;
   --stagger-ring: 60ms;
-  /* When a filter label flips to its on-gold colour: the gold plate is about 85% home. */
-  --delay-filter-settle: 200ms;
   --distance-enter: 8px;
   --distance-nudge: 3px;
-  --scale-press: 0.98;
+  --scale-press: 0.97;
 
   /* Hero sequence: start time of each beat (DESIGN.md, Motion) */
   --hero-beat-1: 0ms;

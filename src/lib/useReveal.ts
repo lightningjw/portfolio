@@ -1,4 +1,4 @@
-import { animate, inView, stagger } from 'motion';
+import { animate, inView } from 'motion';
 import { useEffect, type RefObject } from 'react';
 import { motionTokens, prefersReducedMotion } from './motion';
 
@@ -20,7 +20,12 @@ export function useReveal(ref: RefObject<HTMLElement | null>): void {
 
     const hide = animate(items, { opacity: 0, y: tokens.enter }, { duration: 0 });
     const lastStep = tokens.staggerSectionMax - 1;
-    const step = stagger(tokens.staggerSection);
+    // Gaps shrink down the list (first gap, then each one shorter by the
+    // decay), so the group gathers pace instead of ticking evenly.
+    const delayFor = (index: number) => {
+      const step = Math.min(index, lastStep);
+      return step * tokens.staggerSection - (tokens.staggerSectionDecay * step * (step - 1)) / 2;
+    };
     const stop = inView(
       section,
       () => {
@@ -30,7 +35,7 @@ export function useReveal(ref: RefObject<HTMLElement | null>): void {
           {
             duration: tokens.base,
             ease: tokens.easeOut,
-            delay: (index, total) => step(Math.min(index, lastStep), total),
+            delay: (index) => delayFor(index),
           },
         );
       },
