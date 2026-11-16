@@ -112,8 +112,11 @@
   -webkit-tap-highlight-color: transparent;
   transition: transform var(--duration-press) var(--ease-out);
 
-  &:active {
-    transform: scale(var(--scale-press));
+  /* Under reduced motion a press is a colour change only, never a scale. */
+  @media (prefers-reduced-motion: no-preference) {
+    &:active {
+      transform: scale(var(--scale-press));
+    }
   }
 }
 
