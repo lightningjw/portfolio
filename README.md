@@ -70,7 +70,7 @@ python3 scripts/build_shot_bins.py path/to/team_shots.csv
 
 `.github/workflows/pages.yml` lints and builds every pull request, and deploys `main` to GitHub Pages with the Vite `base` set to `/portfolio/`.
 
-One-time setup: in the repository settings, under Pages, set the source to **GitHub Actions**. The old site deployed from the `gh-pages` branch, which this workflow does not use.
+The repository's Pages source is set to **GitHub Actions**. The `gh-pages` branch belongs to the old site and is no longer used.
 
 ## Fonts
 

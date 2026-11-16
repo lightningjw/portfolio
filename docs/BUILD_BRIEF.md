@@ -33,7 +33,7 @@ The sports theme (soccer, basketball, baseball) comes through data and field geo
 - No typing-text effect, no scroll-jacking, nothing that delays reading content.
 
 ## Content
-PORTFOLIO_BRIEF.md is the source of truth for all copy. Don't invent metrics or projects. TODO fields from the brief show as visible placeholders in development and PR preview builds only. On the deployed site the TODO text is hidden: a missing link hides its button, and a missing headline result shows as a blank tile. List every open TODO in the PR description.
+PORTFOLIO_BRIEF.md is the source of truth for all copy. Don't invent metrics or projects. TODO text from the brief never renders in any build by default: a missing link hides its button, and a missing headline result shows as a blank tile. Placeholders are opt-in for local work with `VITE_SHOW_TODOS=true`, which the deploy workflow never sets. List every open TODO in the PR description.
 Sections: Hero, Projects, About, Experience, Skills (compact grouped list, no progress meters), Contact.
 
 ## Phase plan (one chat per phase)
