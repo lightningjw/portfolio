@@ -102,13 +102,32 @@
   font-variant-numeric: tabular-nums lining-nums;
 }
 
-/* Press feedback for buttons and filter plates. */
+/* Press feedback for buttons and filter plates. The scale is the tap
+   feedback, so the browser's grey tap flash is switched off here and
+   nowhere else. */
 @utility pressable {
+  cursor: pointer;
+  user-select: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
   transition: transform var(--duration-press) var(--ease-out);
 
   &:active {
     transform: scale(var(--scale-press));
   }
+}
+
+/*
+ * Filter plate contents (label and swatch) switch to their on-gold colour
+ * only once the travelling gold plate has landed under them. The switch is
+ * still a hard cut, never a fade: it is a delay, not a colour animation.
+ * Without it the label is board on board, invisible, while the gold travels.
+ * Leaving the active state has no delay.
+ */
+@utility on-gold-settle {
+  transition:
+    color 0s linear var(--delay-filter-settle),
+    background-color 0s linear var(--delay-filter-settle);
 }
 
 /* Text link in body copy: chalk with a gold underline. */

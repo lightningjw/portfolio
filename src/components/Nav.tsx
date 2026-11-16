@@ -119,7 +119,7 @@ export function Nav() {
                     href={`#${link.id}`}
                     onClick={() => setOpen(false)}
                     aria-current={active === link.id ? 'location' : undefined}
-                    className={`type-label flex h-(--size-menu-row) items-center ${
+                    className={`type-label flex h-(--size-menu-row) items-center hover:text-chalk ${
                       active === link.id ? 'text-chalk' : 'text-chalk-dim'
                     }`}
                   >

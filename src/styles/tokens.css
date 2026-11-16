@@ -196,6 +196,8 @@
   --stagger-section: 40ms;
   --stagger-section-max: 5;
   --stagger-ring: 60ms;
+  /* When a filter label flips to its on-gold colour: the gold plate is about 85% home. */
+  --delay-filter-settle: 200ms;
   --distance-enter: 8px;
   --distance-nudge: 3px;
   --scale-press: 0.98;

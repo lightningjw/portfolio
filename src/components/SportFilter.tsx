@@ -38,8 +38,11 @@ export function SportFilter({ sports, value, onChange, count, status }: SportFil
               type="button"
               aria-pressed={active}
               onClick={() => onChange(option.id)}
-              className={`pressable type-label relative flex h-(--size-touch) items-center gap-2 rounded-control border px-4 ${
-                active ? 'border-transparent text-board' : 'border-line-control text-chalk-dim hover:border-chalk hover:text-chalk'
+              // The active plate keeps its border and resting label colour: the
+              // gold plate covers the border, and the label switches to board
+              // on its own span once the gold has landed (on-gold-settle).
+              className={`pressable type-label relative flex h-(--size-touch) items-center gap-2 rounded-control border border-line-control px-4 text-chalk-dim ${
+                active ? '' : 'hover:border-chalk hover:text-chalk'
               }`}
             >
               {active ? (
@@ -56,7 +59,7 @@ export function SportFilter({ sports, value, onChange, count, status }: SportFil
                   <SportSwatch sport={option.id} onGold={active} />
                 </span>
               )}
-              <span className="relative">{option.label}</span>
+              <span className={`relative ${active ? 'on-gold-settle text-board' : ''}`}>{option.label}</span>
             </button>
           );
         })}
