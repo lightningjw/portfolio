@@ -1,5 +1,6 @@
-import { education, experience, type Entry } from '../data/experience';
+import type { Entry } from '../data/experience';
 import { dateRange } from '../lib/format';
+import { useSiteData } from '../lib/siteData';
 import { CentreCircle } from './FieldMarkings';
 import { Section } from './Section';
 
@@ -14,19 +15,22 @@ function EntryRow({ entry, headingLevel }: { entry: Entry; headingLevel: 'h3' | 
       <div className="col-span-full lg:col-span-9">
         <Heading className="type-display-s text-chalk">{entry.org}</Heading>
         <p className="type-body mt-1 text-chalk-dim">{entry.detail.join(' · ')}</p>
-        <ul className="measure mt-3 flex flex-col gap-2">
-          {entry.bullets.map((bullet) => (
-            <li key={bullet} className="bullet type-body text-chalk">
-              {bullet}
-            </li>
-          ))}
-        </ul>
+        {entry.bullets.length > 0 ? (
+          <ul className="measure mt-3 flex flex-col gap-2">
+            {entry.bullets.map((bullet) => (
+              <li key={bullet} className="bullet type-body text-chalk">
+                {bullet}
+              </li>
+            ))}
+          </ul>
+        ) : null}
       </div>
     </li>
   );
 }
 
 export function Experience() {
+  const { education, experience } = useSiteData();
   return (
     <Section id="experience" title="Experience" divider={<CentreCircle />}>
       <ul data-reveal>

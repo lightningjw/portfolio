@@ -18,7 +18,7 @@ npm run preview    # serve the production build locally
 | Script | What it does |
 |---|---|
 | `npm run dev` | Vite dev server |
-| `npm run build` | `tsc -b` then `vite build` into `dist/` |
+| `npm run build` | `tsc -b`, `vite build` into `dist/`, then `scripts/check-dev-only.mjs` |
 | `npm run lint` | ESLint, then `scripts/check-tokens.mjs` |
 | `npm run check` | `lint` then `build`. Run this before opening a PR. |
 
@@ -55,6 +55,8 @@ The deploy workflow never sets that variable.
 ## Design tokens
 
 `src/styles/tokens.css` defines the tokens once and clears Tailwind's default theme, so only DESIGN.md values are available as utilities (`bg-board`, `text-chalk-dim`, `p-6`, `type-display-m`, and so on). Component dimensions are used through the variable form, for example `h-(--size-button)`.
+
+**Stress-test data (development only):** the dev server shows a small switch at the bottom of the page: Real data / Worst case / Empty sport / One project. It swaps the page's data for the fixtures in `src/dev/fixtures.ts` (a 90-character title, a card with no metric and no link, a 40-character skill, a very long job title) and keeps the choice in the URL, for example `http://localhost:5173/portfolio/?data=worst`. Check it at 320px and at 200% browser zoom after touching a card, the filter, an experience entry or the hero. `src/dev/` is loaded only when `import.meta.env.DEV` is true, so a production build never contains it, and `npm run build` ends with `scripts/check-dev-only.mjs`, which fails if it does.
 
 `npm run lint` fails on a raw hex colour, a Tailwind arbitrary value like `w-[200px]`, or a literal `px`, `rem` or `ms` anywhere in `src/` outside `tokens.css`. JavaScript-driven animation reads its durations and curves from the same CSS variables (`src/lib/motion.ts`).
 

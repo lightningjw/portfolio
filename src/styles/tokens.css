@@ -129,6 +129,8 @@
   --size-marker: 6px;
   --size-tile-height: 96px;
   --size-tile-md: 200px;
+  /* Narrowest the descriptor may be beside the plates before it drops under them. */
+  --size-tile-descriptor-min: 72px;
   --size-plate-digit: 0.62em;
   --size-plate-point: 0.34em;
   --size-plate-gap: 0.08em;

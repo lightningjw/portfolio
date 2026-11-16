@@ -26,6 +26,9 @@
     font-weight: var(--type-body-weight);
     -webkit-font-smoothing: antialiased;
     overflow-x: clip;
+    /* A word wider than its column breaks instead of running out of it.
+       Inherited, so it covers headings, card text and list items. */
+    overflow-wrap: break-word;
   }
 
   strong {

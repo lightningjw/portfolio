@@ -12,7 +12,7 @@ const SIZE = { xl: 'type-numeral-xl', m: 'type-numeral-m' } as const;
  */
 export function Plates({ chars, size }: PlatesProps) {
   return (
-    <span aria-hidden="true" className={`plate-row text-chalk ${SIZE[size]}`}>
+    <span aria-hidden="true" className={`plate-row shrink-0 text-chalk ${SIZE[size]}`}>
       {chars.map((char, index) => (
         <span key={index} className={`plate ${char === '.' ? 'plate-point' : ''}`}>
           {char}
