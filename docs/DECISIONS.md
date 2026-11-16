@@ -45,3 +45,9 @@ Append one line per decision: date, decision, short reason. Newest at the bottom
 - 2026-11-15: The site serves 4:5 WebP crops of the portrait (480px and 960px wide); portrait.JPG stays in the repo unmodified.
 - 2026-11-15: ESLint pinned to 9 until eslint-plugin-jsx-a11y supports 10.
 - 2026-11-15: GitHub Pages source switched to GitHub Actions; the gh-pages branch is no longer used.
+- 2026-11-15: Phase 4 polish is in a new PR from redesign/v2; PR #3 was merged before Phase 4 started.
+- 2026-11-15: Hero bins plot in by ring opacity only; the per-bin scale is dropped. Reason: DESIGN.md's performance gate. At 4x CPU throttling the 194 per-bin animations cost a 70 to 90ms style recalculation at the start and dropped frames; ring-only measured 0 dropped at 4x and 6x.
+- 2026-11-15: The hero sequence starts when the main thread is idle (500ms deadline) instead of inside the mount task. Reason: at 4x throttling beat 1 lost 10 to 13 of 54 frames to startup work.
+- 2026-11-15: A newly active filter label and swatch cut to board after delay-filter-settle (200ms), once the gold plate has landed. It is a delayed hard cut, not a colour animation, so the transform-and-opacity rule stands. Reason: the label was board on board while the gold travelled.
+- 2026-11-15: Under reduced motion the press scale and arrow nudge are removed outright, not just their transitions.
+- 2026-11-15: Motion durations are parsed from the CSS tokens with their unit. Reason: the minifier turns 260ms into .26s and every Motion animation was finishing inside one frame in production.
