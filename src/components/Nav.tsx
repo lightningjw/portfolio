@@ -19,13 +19,15 @@ export function Nav() {
   const active = useActiveSection(SECTION_IDS);
   const tokens = useMotionTokens();
   const [open, setOpen] = useState(false);
+  // A keyboard close (Escape) is instant: keyboard actions do not animate.
+  const [instantClose, setInstantClose] = useState(false);
   const listRef = useRef<HTMLUListElement>(null);
   const barRef = useRef<HTMLLIElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
 
   // The current-section bar is one element. It is placed under the active
   // link by transform, and only slides once it has a position to slide from.
-  const placeBar = useCallback(() => {
+  const placeBar = useCallback((slide = true) => {
     const bar = barRef.current;
     if (!bar) return;
     const link = active ? listRef.current?.querySelector<HTMLElement>(`[data-section="${active}"]`) : null;
@@ -34,7 +36,7 @@ export function Nav() {
       bar.removeAttribute('data-slide');
       return;
     }
-    bar.toggleAttribute('data-slide', bar.hasAttribute('data-placed'));
+    bar.toggleAttribute('data-slide', slide && bar.hasAttribute('data-placed'));
     bar.style.transform = `translateX(${link.offsetLeft}px) scaleX(${link.offsetWidth})`;
     bar.setAttribute('data-placed', '');
   }, [active]);
@@ -46,7 +48,8 @@ export function Nav() {
   useEffect(() => {
     const list = listRef.current;
     if (!list) return;
-    const observer = new ResizeObserver(placeBar);
+    // A resize or a late font swap re-places the bar without a slide.
+    const observer = new ResizeObserver(() => placeBar(false));
     observer.observe(list);
     return () => observer.disconnect();
   }, [placeBar]);
@@ -55,6 +58,7 @@ export function Nav() {
     if (!open) return;
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key !== 'Escape') return;
+      setInstantClose(true);
       setOpen(false);
       menuButtonRef.current?.focus();
     };
@@ -96,21 +100,33 @@ export function Nav() {
           type="button"
           aria-expanded={open}
           aria-controls={MENU_ID}
-          onClick={() => setOpen((value) => !value)}
+          onClick={() => {
+            setInstantClose(false);
+            setOpen((value) => !value);
+          }}
           className="pressable type-label flex h-(--size-touch) items-center px-3 text-chalk lg:hidden"
         >
           {open ? 'Close' : 'Menu'}
         </button>
       </nav>
 
-      <AnimatePresence>
+      <AnimatePresence custom={instantClose}>
         {open ? (
           <motion.div
             id={MENU_ID}
             className="absolute inset-x-0 top-full z-20 border-b border-line bg-board lg:hidden"
-            initial={{ opacity: 0, y: -tokens.enter }}
-            animate={{ opacity: 1, y: 0, transition: { duration: tokens.fast, ease: tokens.easeOut } }}
-            exit={{ opacity: 0, y: -tokens.enter, transition: { duration: tokens.fast, ease: tokens.easeIn } }}
+            custom={instantClose}
+            variants={{
+              open: { opacity: 1, y: 0, transition: { duration: tokens.fast, ease: tokens.easeOut } },
+              closed: (instant: boolean) => ({
+                opacity: 0,
+                y: -tokens.enter,
+                transition: { duration: instant ? 0 : tokens.fast, ease: tokens.easeOut },
+              }),
+            }}
+            initial="closed"
+            animate="open"
+            exit="closed"
           >
             <ul className="shell">
               {LINKS.map((link) => (
@@ -119,7 +135,7 @@ export function Nav() {
                     href={`#${link.id}`}
                     onClick={() => setOpen(false)}
                     aria-current={active === link.id ? 'location' : undefined}
-                    className={`type-label flex h-(--size-menu-row) items-center ${
+                    className={`type-label flex h-(--size-menu-row) items-center hover:text-chalk ${
                       active === link.id ? 'text-chalk' : 'text-chalk-dim'
                     }`}
                   >

@@ -46,9 +46,10 @@ export function Projects() {
               initial={{ opacity: 0 }}
               animate={{
                 opacity: 1,
-                transition: { duration: tokens.base, ease: tokens.easeOut, delay: tokens.layout },
+                // Starts as the leaving cards finish, alongside the reflow.
+                transition: { duration: tokens.base, ease: tokens.easeOut, delay: tokens.fast },
               }}
-              exit={{ opacity: 0, transition: { duration: tokens.fast, ease: tokens.easeIn } }}
+              exit={{ opacity: 0, transition: { duration: tokens.fast, ease: tokens.easeOut } }}
               transition={{ layout: { duration: tokens.layout, ease: tokens.easeInOut } }}
             >
               <ProjectCard project={project} />

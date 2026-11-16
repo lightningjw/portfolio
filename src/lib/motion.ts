@@ -14,13 +14,14 @@ export interface MotionTokens {
   fast: number;
   base: number;
   layout: number;
+  /** First gap between staggered items, and how much each later gap shrinks. */
   staggerSection: number;
+  staggerSectionDecay: number;
   staggerSectionMax: number;
   /** Pixels. */
   enter: number;
   easeOut: Bezier;
   easeInOut: Bezier;
-  easeIn: Bezier;
 }
 
 const LINEAR: Bezier = [0, 0, 1, 1];
@@ -34,8 +35,16 @@ function number(name: string): number {
   return Number.isFinite(value) ? value : 0;
 }
 
+/**
+ * A CSS time as seconds. The unit is read, not assumed: the production CSS
+ * minifier rewrites millisecond tokens as fractional seconds, and dividing
+ * those by 1000 made every Motion animation finish inside one frame.
+ */
 function seconds(name: string): number {
-  return number(name) / 1000;
+  const raw = read(name);
+  const value = Number.parseFloat(raw);
+  if (!Number.isFinite(value)) return 0;
+  return /\d\s*ms$/i.test(raw) ? value / 1000 : value;
 }
 
 function bezier(name: string): Bezier {
@@ -52,11 +61,11 @@ export function motionTokens(): MotionTokens {
     base: seconds('--duration-base'),
     layout: seconds('--duration-layout'),
     staggerSection: seconds('--stagger-section'),
+    staggerSectionDecay: seconds('--stagger-section-decay'),
     staggerSectionMax: number('--stagger-section-max'),
     enter: number('--distance-enter'),
     easeOut: bezier('--ease-out'),
     easeInOut: bezier('--ease-in-out'),
-    easeIn: bezier('--ease-in'),
   };
   return cached;
 }
@@ -73,6 +82,6 @@ export function useMotionTokens(): MotionTokens {
   const reduced = useReducedMotion();
   return useMemo(() => {
     const tokens = motionTokens();
-    return reduced ? { ...tokens, fast: 0, base: 0, layout: 0, staggerSection: 0, enter: 0 } : tokens;
+    return reduced ? { ...tokens, fast: 0, base: 0, layout: 0, staggerSection: 0, staggerSectionDecay: 0, enter: 0 } : tokens;
   }, [reduced]);
 }

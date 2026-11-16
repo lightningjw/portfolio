@@ -28,7 +28,7 @@ The sports theme (soccer, basketball, baseball) comes through data and field geo
 
 ## Motion rules
 - One showpiece (the hero). Everything else is quiet: fast entrances, real press/hover feedback, a shared-layout transition for the sport filter.
-- Animate transform and opacity only, with one exception: the hero may stroke-draw its court lines. The hex bins and everything outside the hero stay on transform and opacity. Hold 60fps on a mid-range phone.
+- Animate transform and opacity only, with two exceptions: the hero may stroke-draw its court lines, and the sport filter's gold layer animates clip-path. The hex bins and everything else stay on transform and opacity. Hold 60fps on a mid-range phone.
 - Full prefers-reduced-motion support: the hero renders its final state statically.
 - No typing-text effect, no scroll-jacking, nothing that delays reading content.
 

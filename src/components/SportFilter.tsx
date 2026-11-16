@@ -1,4 +1,5 @@
 import { AnimatePresence, motion } from 'motion/react';
+import { useCallback, useEffect, useLayoutEffect, useRef } from 'react';
 import type { SportId } from '../data/projects';
 import { useMotionTokens } from '../lib/motion';
 import { Plates } from './Plates';
@@ -23,43 +24,85 @@ function countChars(count: number): string[] {
   return digits.length === 1 ? ['', ...digits] : digits;
 }
 
+/** Box shared by a plate and its copy in the gold layer, so the two line up exactly. */
+const PLATE = 'type-label flex h-(--size-touch) items-center gap-2 rounded-control border px-4';
+const ROW = 'flex flex-wrap gap-2';
+
 export function SportFilter({ sports, value, onChange, count, status }: SportFilterProps) {
   const tokens = useMotionTokens();
   const options: { id: FilterValue; label: string }[] = [{ id: 'all', label: 'All' }, ...sports];
+  const groupRef = useRef<HTMLDivElement>(null);
+  const goldRef = useRef<HTMLDivElement>(null);
+
+  // The gold layer is clipped to the active plate. Changing the clip moves the
+  // gold, and a CSS transition makes that travel interruptible: a second press
+  // retargets from wherever the clip is.
+  const placeGold = useCallback(
+    (travel: boolean) => {
+      const group = groupRef.current;
+      const gold = goldRef.current;
+      const plate = group?.querySelector<HTMLElement>('[aria-pressed="true"]');
+      if (!group || !gold || !plate) return;
+      const top = plate.offsetTop;
+      const left = plate.offsetLeft;
+      const right = group.offsetWidth - left - plate.offsetWidth;
+      const bottom = group.offsetHeight - top - plate.offsetHeight;
+      gold.toggleAttribute('data-travel', travel);
+      gold.style.clipPath = `inset(${top}px ${right}px ${bottom}px ${left}px round var(--radius-control))`;
+    },
+    [],
+  );
+
+  // First placement has nothing to travel from; later ones do.
+  const placedRef = useRef(false);
+  useLayoutEffect(() => {
+    placeGold(placedRef.current);
+    placedRef.current = true;
+  }, [placeGold, value]);
+
+  // A resize, a wrap onto two rows or a font swap re-places the clip with no travel.
+  useEffect(() => {
+    const group = groupRef.current;
+    if (!group) return;
+    const observer = new ResizeObserver(() => placeGold(false));
+    observer.observe(group);
+    for (const plate of group.querySelectorAll('button')) observer.observe(plate);
+    return () => observer.disconnect();
+  }, [placeGold]);
 
   return (
     <div className="flex flex-wrap items-center justify-between gap-3">
-      <div role="group" aria-label="Filter projects by sport" className="flex flex-wrap gap-2">
-        {options.map((option) => {
-          const active = option.id === value;
-          return (
+      <div ref={groupRef} className="relative">
+        <div role="group" aria-label="Filter projects by sport" className={ROW}>
+          {options.map((option) => (
             <button
               key={option.id}
               type="button"
-              aria-pressed={active}
+              aria-pressed={option.id === value}
               onClick={() => onChange(option.id)}
-              className={`pressable type-label relative flex h-(--size-touch) items-center gap-2 rounded-control border px-4 ${
-                active ? 'border-transparent text-board' : 'border-line-control text-chalk-dim hover:border-chalk hover:text-chalk'
+              className={`pressable ${PLATE} border-line-control text-chalk-dim ${
+                option.id === value ? '' : 'hover:border-chalk hover:text-chalk'
               }`}
             >
-              {active ? (
-                // One shared gold plate that travels between buttons by transform.
-                <motion.span
-                  layoutId="filter-gold"
-                  aria-hidden="true"
-                  className="absolute -inset-(--size-hairline) rounded-control bg-gold"
-                  transition={{ duration: tokens.layout, ease: tokens.easeInOut }}
-                />
-              ) : null}
-              {option.id === 'all' ? null : (
-                <span className="relative flex">
-                  <SportSwatch sport={option.id} onGold={active} />
-                </span>
-              )}
-              <span className="relative">{option.label}</span>
+              {option.id === 'all' ? null : <SportSwatch sport={option.id} />}
+              {option.label}
             </button>
-          );
-        })}
+          ))}
+        </div>
+
+        {/* The gold layer: the same row in on-gold colours, clipped to the active plate. */}
+        <div
+          ref={goldRef}
+          aria-hidden="true"
+          className={`gold-clip pointer-events-none absolute inset-0 bg-gold ${ROW}`}
+        >
+          {options.map((option) => (
+            <span key={option.id} className={`${PLATE} border-transparent text-board`}>
+              {option.id === 'all' ? null : <SportSwatch sport={option.id} onGold />}
+              {option.label}
+            </span>
+          ))}
+        </div>
       </div>
 
       <div className="slot relative ml-auto flex h-(--size-touch) items-center overflow-hidden rounded-plate px-2">

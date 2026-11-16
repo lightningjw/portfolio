@@ -1,6 +1,16 @@
 @import 'tailwindcss';
 @import './tokens.css';
 
+/* Hover styles only where there is a real hovering pointer. Touch screens
+   fire :hover on tap and leave it stuck, so both conditions are required. */
+@custom-variant hover {
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      @slot;
+    }
+  }
+}
+
 @layer base {
   :root {
     color-scheme: dark;
@@ -102,12 +112,35 @@
   font-variant-numeric: tabular-nums lining-nums;
 }
 
-/* Press feedback for buttons and filter plates. */
+/* Press feedback for buttons and filter plates. The scale is the tap
+   feedback, so the browser's grey tap flash is switched off here and
+   nowhere else. */
 @utility pressable {
+  cursor: pointer;
+  user-select: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
   transition: transform var(--duration-press) var(--ease-out);
 
-  &:active {
-    transform: scale(var(--scale-press));
+  /* Under reduced motion a press is a colour change only, never a scale. */
+  @media (prefers-reduced-motion: no-preference) {
+    &:active {
+      transform: scale(var(--scale-press));
+    }
+  }
+}
+
+/*
+ * The filter's gold layer: a copy of the plate row in its on-gold colours,
+ * clipped to the active plate. Moving the clip is what moves the gold, so
+ * each label changes colour exactly at the gold's edge. The one clip-path
+ * animation on the site (DESIGN.md, Motion). The inset is set by script.
+ */
+@utility gold-clip {
+  clip-path: inset(0 100% 100% 0 round var(--radius-control));
+
+  &[data-travel] {
+    transition: clip-path var(--duration-layout) var(--ease-in-out);
   }
 }
 
@@ -119,7 +152,7 @@
   text-decoration-thickness: var(--size-underline);
   text-underline-offset: var(--size-underline-offset);
 
-  @media (hover: hover) {
+  @media (hover: hover) and (pointer: fine) {
     &:hover {
       text-decoration-thickness: var(--size-underline-hover);
     }
@@ -179,17 +212,6 @@
   }
 }
 
-@keyframes hero-bin {
-  from {
-    opacity: 0;
-    transform: scale(var(--scale-bin-from));
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
 @keyframes hero-rise {
   from {
     opacity: 0;
@@ -240,18 +262,15 @@
     animation-delay: var(--hero-beat-rim);
   }
 
-  /* One delay per ring (8 groups), inherited by the bins inside it. */
-  [data-hero] [data-ring] {
-    --ring-delay: calc(var(--hero-beat-4) + var(--ring-index) * var(--stagger-ring));
-  }
-
+  /* Bins plot in by ring: one opacity animation per ring group (8), not one
+     per bin (194). Starting 194 animations in one frame cost a long
+     style recalculation at 4x CPU throttling and dropped the first frames
+     of the line draw. */
   [data-hero] [data-beat='4'] {
-    transform-box: fill-box;
-    transform-origin: center;
-    animation-name: hero-bin;
+    animation-name: hero-fade;
     animation-duration: var(--duration-bin);
     animation-timing-function: var(--ease-out);
-    animation-delay: var(--ring-delay);
+    animation-delay: calc(var(--hero-beat-4) + var(--ring-index) * var(--stagger-ring));
   }
 
   [data-hero] [data-beat='5'] {

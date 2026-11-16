@@ -348,8 +348,8 @@ Flat, with one direction of depth: inward.
 Shared interaction rules for everything below:
 
 - **Focus-visible:** `outline: 2px solid gold; outline-offset: 2px`. Same ring on every interactive element. Never removed, never replaced by a colour change alone.
-- **Pressed:** `transform: scale(0.98)` over `press` (80ms). Buttons and filter plates only.
-- **Hover** is wrapped in `@media (hover: hover)` so touch devices do not get stuck hover states.
+- **Pressed:** `transform: scale(0.97)` over `press` (160ms). Buttons and filter plates only.
+- **Hover** is wrapped in `@media (hover: hover) and (pointer: fine)` so touch devices do not get stuck hover states.
 - **Disabled** does not exist in v1. If a thing cannot be used, it is not rendered.
 
 ### Buttons and links (primitives)
@@ -367,7 +367,7 @@ States:
 
 - Link default `chalk-dim`; hover chalk; current section chalk with a 2px gold bar under it.
 - The gold bar moves between links by transform (`base`, `out`). It is one element, not five.
-- MENU button: `aria-expanded`, label switches to CLOSE. Escape closes and returns focus to the button.
+- MENU button: `aria-expanded`, label switches to CLOSE. Escape closes instantly, with no exit animation (keyboard actions do not animate), and returns focus to the button.
 - Focus-visible: the shared ring.
 
 Never:
@@ -443,7 +443,7 @@ Data rules: a category with zero projects is not rendered. If fewer than two cat
 States:
 
 - **Inactive:** `board` fill, 1px `line-control` border, `chalk-dim` label. Hover: label chalk, border chalk.
-- **Active filter:** gold fill, `board` label, swatch switches to `board`, no border. The gold is one shared element that travels from the old plate to the new one by transform.
+- **Active filter:** gold fill, `board` label, swatch switches to `board`. The gold is one layer: a copy of the whole plate row in its on-gold colours, laid over the row and clipped to the active plate. Moving the clip from the old plate to the new one is the travel, so every label changes colour exactly at the gold's edge, including plates the gold passes over. The layer is `aria-hidden` and takes no pointer events; the buttons underneath keep their resting colours.
 - **Pressed:** press scale.
 - **Focus-visible:** the shared ring, on top of either fill.
 - **Count tile:** when the count changes, the old plates slide up and out of the slot and the new ones slide up into it (clipped by the slot).
@@ -510,32 +510,32 @@ Never:
 
 Stance: plates are hung, lines are chalked. Things arrive and stop. Nothing overshoots, bounces, loops or follows the cursor.
 
-Property rule (logged): transform and opacity only, everywhere. The single exception is the hero court lines, which may animate `stroke-dashoffset`.
+Property rule (logged): transform and opacity only, everywhere, with two exceptions: the hero court lines may animate `stroke-dashoffset`, and the filter's gold layer animates `clip-path`.
 
 ### Tokens
 
 | Token | Value | Use |
 |---|---|---|
-| `duration-press` | 80ms | Press scale |
+| `duration-press` | 160ms | Press scale |
 | `duration-fast` | 140ms | Hover, focus, arrow nudge, exits |
 | `duration-base` | 220ms | Section entrances, nav bar slide, count plate swap |
-| `duration-layout` | 260ms | Filter gold plate travel, card reflow |
+| `duration-layout` | 260ms | Filter gold travel, card reflow |
 | `duration-draw` | 600ms | One court line stroke |
 | `duration-bin` | 240ms | One hero bin ring |
 | `ease-out` | cubic-bezier(0.22, 1, 0.36, 1) | Default for everything that enters or moves |
-| `ease-in-out` | cubic-bezier(0.65, 0, 0.35, 1) | Card reflow, gold plate travel |
+| `ease-in-out` | cubic-bezier(0.77, 0, 0.175, 1) | Card reflow, filter gold travel |
 | `ease-draw` | cubic-bezier(0.33, 1, 0.68, 1) | Court line strokes |
-| `ease-in` | cubic-bezier(0.5, 0, 0.75, 0) | Exits only |
-| `stagger-section` | 40ms, max 5 items | Section entrances |
+| `stagger-section` | 50ms first gap, max 5 items | Section entrances |
+| `stagger-section-decay` | 10ms | Each later gap is this much shorter: items start at 0, 50, 90, 120 and 140ms |
 | `stagger-ring` | 60ms | Hero bin rings |
 | `distance-enter` | 8px | Section entrance rise |
 | `distance-nudge` | 3px | Arrow link |
 
-No springs. Motion is configured as tweens with these curves so there is no overshoot.
+No springs. Motion is configured as tweens with these curves so there is no overshoot. There is no `ease-in` token: exits use `ease-out` too.
 
 ### Hero animation, beat by beat
 
-Runs once per page load, starting when the page is visible. Total 1,800ms. The h1 and buttons are not part of it and are fully rendered before beat 1.
+Runs once per page load, starting when the page is visible and the main thread is idle (500ms deadline). Total 1,800ms. The h1 and buttons are not part of it and are fully rendered before beat 1.
 
 | Beat | Window | What happens | Properties |
 |---|---|---|---|
@@ -543,15 +543,16 @@ Runs once per page load, starting when the page is visible. Total 1,800ms. The h
 | 1 | 0 to 600ms | Baseline, sidelines and the half-court line stroke on, each from its baseline end. | `stroke-dashoffset`, `ease-draw` |
 | 2 | 200 to 800ms | The key, the free-throw circle and the no-charge arc stroke on. | `stroke-dashoffset`, `ease-draw` |
 | 3 | 400 to 1,000ms | The three-point line strokes on from the left corner around to the right. The rim and backboard fade in at 800ms over 140ms. | `stroke-dashoffset`; opacity for rim |
-| 4 | 900 to 1,560ms | Bins plot from the rim outward in 8 distance rings. Each ring: opacity 0 to 1 and scale 0.7 to 1 about each bin's own centre, 240ms, rings 60ms apart. | opacity, transform, `ease-out` |
+| 4 | 900 to 1,560ms | Bins plot from the rim outward in 8 distance rings. Each ring: opacity 0 to 1, 240ms, rings 60ms apart. No per-bin scale (see the performance gate). | opacity, `ease-out` |
 | 5 | 1,560 to 1,800ms | Legend and caption row fade in and rise 8px. | opacity, transform, `ease-out` |
 
 Constraints:
 
 - Court lines use `pathLength="1"` so every stroke shares one dash setup. Lines are `court-line`, 1.5px, `vector-effect: non-scaling-stroke`, round caps. One exception: while the sequence runs, non-scaling-stroke is switched off and the 1.5px width is computed from the chart's measured scale, because Chromium measures `pathLength` dashes in screen space under non-scaling-stroke and the lines fragment. Non-scaling-stroke is restored when the sequence ends.
 - The sequence is CSS keyframes driven by the motion tokens, started by script. Motion (the library) handles the filter, card reflow, count tile, menu and section entrances.
-- Bins are grouped per ring in the SVG (8 `g` elements) by distance from the rim, so the stagger is 8 timers, not 194. The cap is 200 bins; if the data is rebuilt and exceeds it, raise the minimum attempts, not the cap.
-- Performance gate (Phase 6): on a mid-range phone profile (4x CPU throttle), beat 4 must hold 60fps. If it does not, drop the per-bin scale and keep ring opacity only. Do not move the chart to canvas.
+- Bins are grouped per ring in the SVG (8 `g` elements) by distance from the rim, so the plot-in is 8 animations, one per ring group, not 194. The cap is 200 bins; if the data is rebuilt and exceeds it, raise the minimum attempts, not the cap.
+- Performance gate, applied in Phase 4: profiled at 4x CPU throttling (412 by 915 at 2.625x, headless Chrome), the per-bin scale failed it. Beat 4 itself held 60fps, but starting 194 per-bin animations in one frame cost a 70 to 90ms style recalculation that dropped the first 4 to 5 frames of beat 1. The fallback is in force: ring opacity only, no per-bin scale. Measured after: 0 dropped frames at 4x and at 6x. Do not move the chart to canvas, and do not bring the per-bin scale back without re-profiling. A recording on a real mid-range phone is still owed in Phase 6, because CPU throttling does not model a weak GPU.
+- The sequence does not start inside the mount task. The chart is armed (hidden first frame) before first paint and started from an idle callback, with a 500ms deadline and a 150ms timer where idle callbacks are missing. Started at mount, beat 1 overlapped the first paint, effects and font swap and dropped 10 to 13 of its 54 frames at 4x.
 - If the tab is hidden at load, the sequence waits for visibility. If the user scrolls past before it ends, it finishes anyway and is never replayed.
 - With JavaScript disabled or failed, the chart renders in its final state. The initial hidden state is applied by script, not by default CSS. Known gap after Phase 3: the site is client-rendered, so nothing renders at all without JavaScript. Closing it needs a prerender step, scheduled for Phase 6.
 
@@ -560,16 +561,16 @@ Constraints:
 | Element | Motion | Reduced-motion fallback |
 |---|---|---|
 | Hero court lines | Stroke-draw, beats 1 to 3 | Rendered fully drawn in the first frame. No draw. |
-| Hero bins | Ring plot-in, beat 4 | Rendered at final opacity and scale in the first frame. |
+| Hero bins | Ring fade-in, beat 4 | Rendered at final opacity in the first frame. |
 | Hero legend and caption | Fade and rise, beat 5 | Rendered in place in the first frame. |
-| Section entrance (h2, then content blocks) | Once, on first entry to the viewport: opacity 0 to 1, rise 8px, `base`, `ease-out`, stagger 40ms up to 5 items | No animation. Content is visible from the first frame. |
+| Section entrance (h2, then content blocks) | Once, on first entry to the viewport: opacity 0 to 1, rise 8px, `base`, `ease-out`, stagger with shrinking gaps (50, 40, 30, 20ms) up to 5 items | No animation. Content is visible from the first frame. |
 | Nav current-section bar | Slides between links, `base`, `ease-out` | Jumps to the new link. No slide. |
-| Mobile menu panel | Opacity 0 to 1 and 8px drop, `fast`, `ease-out`; exit `fast`, `ease-in` | Appears and disappears instantly. |
-| Button and filter press | Scale to 0.98, `press` | No scale. Colour change only. |
+| Mobile menu panel | Opacity 0 to 1 and 8px drop, `fast`, `ease-out`; exit `fast`, `ease-out`. No exit animation when closed with Escape. | Appears and disappears instantly. |
+| Button and filter press | Scale to 0.97, `press` | No scale. Colour change only. The `:active` scale itself is gated on `prefers-reduced-motion: no-preference`, not just its transition. |
 | Button, link and card hover fills | None. Colour changes are instant, which keeps the transform-and-opacity rule without exceptions. | Same. |
-| Arrow link nudge | 3px translate, `fast`, `ease-out` | No translate. |
-| Filter gold plate | Shared-layout travel to the new plate, `layout`, `ease-in-out` | Jumps. No travel. |
-| Filter card reflow | Leaving cards: opacity to 0, `fast`, `ease-in`. Staying cards: FLIP to new positions, `layout`, `ease-in-out`. Entering cards: opacity 0 to 1, `base`, after reflow. No stagger. | Instant swap: cards are removed and added with no transition. |
+| Arrow link nudge | 3px translate, `fast`, `ease-out` | No translate. The hover translate is gated on `no-preference`, not just its transition. |
+| Filter gold layer | `clip-path` inset travels to the new plate, `layout`, `ease-in-out`. A CSS transition, so a second press retargets from where the clip is. | Jumps. No travel. |
+| Filter card reflow | Leaving cards: opacity to 0, `fast`, `ease-out`. Staying cards: FLIP to new positions, `layout`, `ease-in-out`. Entering cards: opacity 0 to 1, `base`, starting after `fast`, as the leaving cards finish and alongside the reflow. No stagger. | Instant swap: cards are removed and added with no transition. |
 | Filter count plates | Old plates translate up 100% and out, new translate up in, `base`, `ease-out`, clipped by the slot | Number changes instantly. |
 | Field markings | None. Always static. | Same. |
 | Anchor scrolling | Native `scroll-behavior: smooth` | `scroll-behavior: auto` |
@@ -582,6 +583,8 @@ Other motion rules:
 - Nothing animates for longer than 600ms except the hero sequence.
 - No scroll-linked animation, no parallax, no scroll-jacking, no cursor effects, no marquee, no typing effect, no count-up.
 - The filter is interruptible: a second press during a reflow retargets from the current position. It never queues.
+- JavaScript reads durations from the CSS tokens with their unit. The production minifier rewrites `260ms` as `.26s`, so code must never assume milliseconds.
+- Controls with the press scale also set `cursor: pointer`, `user-select: none`, `touch-action: manipulation` and a transparent tap highlight. The tap highlight stays on for cards and text links, which have no press scale.
 
 ## Field markings
 
