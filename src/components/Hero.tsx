@@ -1,7 +1,7 @@
 import { useLayoutEffect, useRef } from 'react';
-import { profile } from '../data/profile';
 import { prefersReducedMotion } from '../lib/motion';
 import { COURT } from '../lib/shotChart';
+import { useSiteData } from '../lib/siteData';
 import { ButtonLink } from './Button';
 import { ShotChart } from './ShotChart';
 
@@ -12,6 +12,7 @@ const START_FALLBACK = 150;
 
 /** Headline beside the chart. The h1 and buttons are in their final state from the first frame. */
 export function Hero() {
+  const { headline } = useSiteData();
   const figureRef = useRef<HTMLElement>(null);
 
   const sequenceRef = useRef<'idle' | 'running' | 'done'>('idle');
@@ -86,7 +87,7 @@ export function Hero() {
     <section aria-labelledby="hero-title" className="shell page-grid gap-y-12">
       <div className="col-span-full lg:col-span-5">
         <h1 id="hero-title" className="type-display-xl text-chalk">
-          {profile.headline}
+          {headline}
         </h1>
         <div className="mt-8 flex flex-wrap gap-3">
           <ButtonLink href="#projects" variant="primary">

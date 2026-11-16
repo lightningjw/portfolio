@@ -1,5 +1,6 @@
-import { education, experience, type Entry } from '../data/experience';
+import type { Entry } from '../data/experience';
 import { dateRange } from '../lib/format';
+import { useSiteData } from '../lib/siteData';
 import { CentreCircle } from './FieldMarkings';
 import { Section } from './Section';
 
@@ -27,6 +28,7 @@ function EntryRow({ entry, headingLevel }: { entry: Entry; headingLevel: 'h3' | 
 }
 
 export function Experience() {
+  const { education, experience } = useSiteData();
   return (
     <Section id="experience" title="Experience" divider={<CentreCircle />}>
       <ul data-reveal>

@@ -27,6 +27,8 @@ jobs:
       - run: npm run lint
       # The site is served at lightningjw.github.io/portfolio/.
       # VITE_SHOW_TODOS is never set here, so TODO placeholders cannot ship.
+      # The build script ends with scripts/check-dev-only.mjs, which fails
+      # if the development-only stress-test data is in dist/.
       - run: npm run build -- --base=/portfolio/
       - if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v3

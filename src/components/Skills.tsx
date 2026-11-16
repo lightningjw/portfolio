@@ -1,4 +1,4 @@
-import { skills } from '../data/skills';
+import { useSiteData } from '../lib/siteData';
 import { Section } from './Section';
 
 const PLATE =
@@ -18,6 +18,7 @@ function PlateList({ items, labelledBy }: { items: readonly string[]; labelledBy
 
 /** Grouped skill plates. Not buttons: no hover, no focus, no ratings. */
 export function Skills() {
+  const { skills } = useSiteData();
   return (
     <Section id="skills" title="Skills">
       <div data-reveal className="flex flex-col gap-8">

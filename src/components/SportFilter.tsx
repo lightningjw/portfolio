@@ -58,7 +58,7 @@ export function SportFilter({ sports, value, onChange, count, status }: SportFil
   useLayoutEffect(() => {
     placeGold(placedRef.current);
     placedRef.current = true;
-  }, [placeGold, value]);
+  }, [placeGold, value, sports]);
 
   // A resize, a wrap onto two rows or a font swap re-places the clip with no travel.
   useEffect(() => {
@@ -68,7 +68,7 @@ export function SportFilter({ sports, value, onChange, count, status }: SportFil
     observer.observe(group);
     for (const plate of group.querySelectorAll('button')) observer.observe(plate);
     return () => observer.disconnect();
-  }, [placeGold]);
+  }, [placeGold, sports]);
 
   return (
     <div className="flex flex-wrap items-center justify-between gap-3">
