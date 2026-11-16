@@ -25,18 +25,26 @@ function ResultTile({ project }: { project: Project }) {
     );
   }
 
+  // Below 768 the descriptor sits beside the plates while it has room, and
+  // drops under them when it does not. The tile grows instead of clipping.
   return (
-    <div className="slot area-tile mt-6 flex h-(--size-tile-height) items-center gap-x-4 rounded-plate px-3 md:mt-0 md:h-auto md:flex-col md:items-start md:gap-y-2 md:self-start md:py-3">
-      <p className="flex shrink-0 items-baseline gap-2">
+    <div className="slot area-tile mt-6 flex min-h-(--size-tile-height) flex-wrap items-center gap-x-4 gap-y-2 rounded-plate px-3 py-3 md:mt-0 md:min-h-0 md:flex-col md:flex-nowrap md:items-start md:self-start">
+      <p className="flex max-w-full min-w-0 flex-wrap items-baseline gap-x-2 gap-y-1">
         <span className="sr-only">
           {tile.value} {tile.unit}
         </span>
         <Plates chars={[...tile.value]} size="xl" />
-        <span aria-hidden="true" className="type-label-s text-chalk">
-          {tile.unit}
-        </span>
+        {tile.unit ? (
+          <span aria-hidden="true" className="type-label-s min-w-0 text-chalk">
+            {tile.unit}
+          </span>
+        ) : null}
       </p>
-      <p className="type-label-s text-chalk-dim">{tile.descriptor}</p>
+      {tile.descriptor ? (
+        <p className="type-label-s min-w-0 flex-1 basis-(--size-tile-descriptor-min) text-chalk-dim md:flex-none">
+          {tile.descriptor}
+        </p>
+      ) : null}
     </div>
   );
 }
