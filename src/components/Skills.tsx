@@ -2,11 +2,11 @@ import { useSiteData } from '../lib/siteData';
 import { Section } from './Section';
 
 const PLATE =
-  'type-body-s flex min-h-(--size-skill-plate) items-center rounded-plate border border-line-control bg-board px-(--size-skill-plate-pad) text-chalk';
+  'type-body-s flex min-h-(--size-skill-plate) min-w-0 items-center rounded-plate border border-line-control bg-board px-(--size-skill-plate-pad) wrap-anywhere text-chalk';
 
 function PlateList({ items, labelledBy }: { items: readonly string[]; labelledBy: string }) {
   return (
-    <ul aria-labelledby={labelledBy} className="flex flex-wrap gap-2">
+    <ul aria-labelledby={labelledBy} className="flex min-w-0 flex-wrap gap-2">
       {items.map((item) => (
         <li key={item} className={PLATE}>
           {item}
