@@ -34,8 +34,16 @@ function number(name: string): number {
   return Number.isFinite(value) ? value : 0;
 }
 
+/**
+ * A CSS time as seconds. The unit is read, not assumed: the production CSS
+ * minifier rewrites millisecond tokens as fractional seconds, and dividing
+ * those by 1000 made every Motion animation finish inside one frame.
+ */
 function seconds(name: string): number {
-  return number(name) / 1000;
+  const raw = read(name);
+  const value = Number.parseFloat(raw);
+  if (!Number.isFinite(value)) return 0;
+  return /\d\s*ms$/i.test(raw) ? value / 1000 : value;
 }
 
 function bezier(name: string): Bezier {
