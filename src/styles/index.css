@@ -1,0 +1,347 @@
+@import 'tailwindcss';
+@import './tokens.css';
+
+@layer base {
+  :root {
+    color-scheme: dark;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-board);
+    color: var(--color-chalk);
+    font-family: var(--font-body);
+    font-size: var(--type-body-size);
+    line-height: var(--type-body-leading);
+    font-weight: var(--type-body-weight);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: clip;
+  }
+
+  strong {
+    font-weight: var(--type-emphasis-weight);
+  }
+
+  /* One focus ring for every interactive element. */
+  :focus-visible {
+    outline: var(--size-ring) solid var(--color-gold);
+    outline-offset: var(--size-ring-offset);
+  }
+
+  section[id],
+  main[id] {
+    scroll-margin-top: calc(var(--size-nav) + var(--spacing-4));
+
+    @variant lg {
+      scroll-margin-top: calc(var(--size-nav-lg) + var(--spacing-4));
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :root {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+}
+
+/* Page shell: margins per breakpoint, content stops at 1200. */
+@utility shell {
+  width: 100%;
+  max-width: calc(var(--size-content-max) + 2 * var(--size-margin-base));
+  margin-inline: auto;
+  padding-inline: var(--size-margin-base);
+
+  @variant md {
+    max-width: calc(var(--size-content-max) + 2 * var(--size-margin-md));
+    padding-inline: var(--size-margin-md);
+  }
+
+  @variant lg {
+    max-width: calc(var(--size-content-max) + 2 * var(--size-margin-lg));
+    padding-inline: var(--size-margin-lg);
+  }
+}
+
+/* 4 / 8 / 12 column grid with the DESIGN.md gutters. */
+@utility page-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  column-gap: var(--size-gutter-base);
+
+  @variant md {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    column-gap: var(--size-gutter-md);
+  }
+
+  @variant lg {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--size-gutter-lg);
+  }
+}
+
+/* Recessed slot: dark lip on top, lit lip on the bottom. Depth goes in. */
+@utility slot {
+  background-color: var(--color-board-deep);
+  box-shadow:
+    inset 0 var(--size-hairline) 0 var(--color-slot-lip-dark),
+    inset 0 calc(-1 * var(--size-hairline)) 0 var(--color-slot-lip-lit);
+}
+
+@utility measure {
+  max-width: var(--size-measure);
+}
+
+@utility tabular {
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* Press feedback for buttons and filter plates. */
+@utility pressable {
+  transition: transform var(--duration-press) var(--ease-out);
+
+  &:active {
+    transform: scale(var(--scale-press));
+  }
+}
+
+/* Text link in body copy: chalk with a gold underline. */
+@utility text-link {
+  color: var(--color-chalk);
+  text-decoration-line: underline;
+  text-decoration-color: var(--color-gold);
+  text-decoration-thickness: var(--size-underline);
+  text-underline-offset: var(--size-underline-offset);
+
+  @media (hover: hover) {
+    &:hover {
+      text-decoration-thickness: var(--size-underline-hover);
+    }
+  }
+}
+
+/* Field markings and court lines: surveying marks, never filled. */
+@utility marking {
+  fill: none;
+  stroke-width: var(--size-marking-stroke);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+
+  @variant md {
+    stroke-width: var(--size-marking-stroke-md);
+  }
+}
+
+@utility court-line {
+  fill: none;
+  stroke: var(--color-court-line);
+  stroke-width: var(--size-court-stroke);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+
+  /* pathLength dashes need a scaling stroke, so while the hero sequence
+     runs the width comes from the measured scale instead. */
+  [data-hero] & {
+    vector-effect: none;
+    stroke-width: calc(var(--size-court-stroke) / var(--court-scale, 1));
+  }
+}
+
+/*
+ * Hero sequence. The chart renders in its final state by default. Script
+ * sets data-hero on the figure: "armed" holds the first frame while the tab
+ * is hidden, "run" plays the sequence once. Durations and beat times are
+ * tokens; nothing here animates under prefers-reduced-motion.
+ */
+@keyframes hero-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes hero-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes hero-bin {
+  from {
+    opacity: 0;
+    transform: scale(var(--scale-bin-from));
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    transform: translateY(var(--distance-enter));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@layer components {
+  [data-hero] [data-beat] {
+    animation-fill-mode: both;
+    animation-play-state: paused;
+  }
+
+  [data-hero='run'] [data-beat] {
+    animation-play-state: running;
+  }
+
+  [data-hero] [data-beat='1'],
+  [data-hero] [data-beat='2'],
+  [data-hero] [data-beat='3'] {
+    /* Gap longer than the path, so no round cap shows at the far end. */
+    stroke-dasharray: 1 2;
+    animation-name: hero-draw;
+    animation-duration: var(--duration-draw);
+    animation-timing-function: var(--ease-draw);
+  }
+
+  [data-hero] [data-beat='1'] {
+    animation-delay: var(--hero-beat-1);
+  }
+
+  [data-hero] [data-beat='2'] {
+    animation-delay: var(--hero-beat-2);
+  }
+
+  [data-hero] [data-beat='3'] {
+    animation-delay: var(--hero-beat-3);
+  }
+
+  [data-hero] [data-beat='rim'] {
+    animation-name: hero-fade;
+    animation-duration: var(--duration-fast);
+    animation-timing-function: var(--ease-out);
+    animation-delay: var(--hero-beat-rim);
+  }
+
+  /* One delay per ring (8 groups), inherited by the bins inside it. */
+  [data-hero] [data-ring] {
+    --ring-delay: calc(var(--hero-beat-4) + var(--ring-index) * var(--stagger-ring));
+  }
+
+  [data-hero] [data-beat='4'] {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation-name: hero-bin;
+    animation-duration: var(--duration-bin);
+    animation-timing-function: var(--ease-out);
+    animation-delay: var(--ring-delay);
+  }
+
+  [data-hero] [data-beat='5'] {
+    animation-name: hero-rise;
+    animation-duration: var(--duration-bin);
+    animation-timing-function: var(--ease-out);
+    animation-delay: var(--hero-beat-5);
+  }
+}
+
+/* A link whose hit area and focus ring cover its positioned ancestor (the card). */
+@utility stretched-link {
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius-plate);
+  }
+
+  &:focus-visible {
+    outline: none;
+  }
+
+  &:focus-visible::after {
+    outline: var(--size-ring) solid var(--color-gold);
+    outline-offset: var(--size-ring-offset);
+  }
+}
+
+/* Box score card: text, then tile, then link. From 768 the tile sits to the right. */
+@utility card-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: 'text' 'tile' 'link';
+
+  @variant md {
+    grid-template-columns: minmax(0, 1fr) var(--size-tile-md);
+    grid-template-rows: 1fr auto;
+    grid-template-areas: 'text tile' 'link tile';
+    column-gap: var(--spacing-6);
+  }
+}
+
+@utility area-text {
+  grid-area: text;
+}
+
+@utility area-tile {
+  grid-area: tile;
+}
+
+@utility area-link {
+  grid-area: link;
+}
+
+/* One character of a stat: a fixed-width plate with the glyph centred. */
+@utility plate {
+  display: inline-flex;
+  width: var(--size-plate-digit);
+  justify-content: center;
+  padding-block: var(--size-plate-pad);
+  border-radius: var(--radius-plate);
+  background-color: var(--color-board-raised);
+  /* Keeps an empty plate the height of a lettered one. */
+  &::before {
+    content: '\200b';
+  }
+}
+
+@utility plate-point {
+  width: var(--size-plate-point);
+}
+
+@utility plate-row {
+  display: inline-flex;
+  gap: var(--size-plate-gap);
+}
+
+/* List item with a square chalk-dim marker, centred on the first line. */
+@utility bullet {
+  position: relative;
+  padding-left: var(--spacing-4);
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: calc((1lh - var(--size-marker)) / 2);
+    width: var(--size-marker);
+    height: var(--size-marker);
+    background-color: var(--color-chalk-dim);
+  }
+}

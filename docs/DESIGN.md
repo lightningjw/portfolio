@@ -413,17 +413,17 @@ Anatomy, top to bottom:
 2. **Title:** h3, `display-m`, chalk.
 3. **Question:** the project's question, `body-l`, chalk. This is the lead. It is never truncated.
 4. **Method row:** the field label METHOD in `label-s` `chalk-dim`, then a short method line in `body-s` `chalk-dim`. The short line is a tightened form of the brief's method text and lives in `projects.ts` as its own field. It must be approved before it ships (see TODOs).
-5. **Result tile:** a recessed slot holding the headline value on plates (`numeral-xl`, chalk), the unit in `label-s`, and under the plates a one-line descriptor in `label-s` `chalk-dim` (for example the baseline it is measured against). One tile per card.
+5. **Result tile:** a recessed slot holding the headline value on plates (`numeral-xl`, chalk), the unit in `label-s`, and a one-line descriptor in `label-s` `chalk-dim` (for example the baseline it is measured against). From 768 the descriptor sits under the plates; below 768 it sits beside them, to the right of the unit. One tile per card.
 6. **Link:** an arrow link, present only if the project has a URL.
 
-Layout: below 768 the tile is full width under the method row, 96px tall. From 768 the tile sits to the right of the text at 200px wide. From 1024 the grid is 2 columns and the tile is 168px wide at the card's top right. Card padding 24 (16 at 360). Cards in a row share height; the question grows, the tile stays pinned.
+Layout: below 768 the tile is full width under the method row, 96px tall, with the plates and the descriptor side by side (plates at `numeral-xl` are 72px tall, so a descriptor under them does not fit in 96px). From 768 the tile sits at the card's top right, 200px wide, at every wider breakpoint. From 1024 the grid is 2 columns. The tile is never narrower than 200px: four plates plus a unit ("95.6 MPH") need about 170px of inner width. Card padding 24 (16 at 360). Cards in a row share height; the question grows, the tile stays pinned.
 
 States:
 
 - **Linked card:** the whole card is the click target through a stretched link on the arrow link (one link, one tab stop). Hover: fill becomes `board-raised-hover`, border becomes `line-control`, arrow moves 3px. Focus-visible: the ring wraps the card. Pressed: no scale on the card, the fill returns to `board-raised`.
 - **Unlinked card:** no hover, no pointer cursor, no tab stop. It must look inert, not broken.
 - **Blank result (production):** the tile renders with two empty plates and no text, `aria-hidden`. On a hand-operated board, an empty slot reads as "not played yet", which is the truth.
-- **TODO (dev and PR preview only):** a missing field shows `TODO: ...` in `body-s` `chalk-dim` inside a 1px dashed `line-control` outline. This styling never ships to production.
+- **TODO (opt-in only):** TODO text never renders in any build by default, including development and PR previews. With `VITE_SHOW_TODOS=true` set locally, a missing field shows `TODO: ...` in `body-s` `chalk-dim` inside a 1px dashed `line-control` outline. The deploy workflow never sets that variable, so this styling never ships.
 
 Never:
 
@@ -436,7 +436,7 @@ Never:
 
 ### Sport filter
 
-Anatomy: a group labelled "Filter projects by sport" holding one plate per category (All, Baseball, Basketball, Motorsport, Core ML, in that order), and a count tile at the right end: a small recessed slot with the number of projects shown, two plates, `numeral-m`. Each plate is a `button` with `aria-pressed`, 44px tall, containing the sport swatch (none for All) and the name in `label`. Plates wrap onto a second row at 360. They do not scroll sideways. A polite live region announces the result ("Showing 3 Baseball projects").
+Anatomy: a group labelled "Filter projects by sport" holding one plate per category (All, Baseball, Basketball, Motorsport, Core ML, in that order), and a count tile at the right end: a small recessed slot with the number of projects shown, two plates, `numeral-m`. A single-digit count leaves the leading plate empty, so the slot always holds two plates. Each plate is a `button` with `aria-pressed`, 44px tall, containing the sport swatch (none for All) and the name in `label`. Plates wrap onto a second row at 360. They do not scroll sideways. A polite live region announces the result ("Showing 3 Baseball projects").
 
 Data rules: a category with zero projects is not rendered. If fewer than two categories exist, the whole filter is not rendered.
 
@@ -463,6 +463,8 @@ Anatomy: h2, the bio from the brief in `body-l` (65ch cap), and the portrait. Th
 
 Anatomy: a row split by a 1px `line` rule above it. Left: the date range in `label`, tabular, `chalk-dim` (for example JUL 2026 – PRESENT). Right: organisation in `display-s` chalk; role and location on one line in `body` `chalk-dim`, separated by a middle dot; then the description as bullets in `body` chalk, using a 6px chalk-dim square as the marker. From 1024 the dates take 3 columns and the content 9. Below 1024 the dates stack above the organisation.
 
+Education uses this same component. It sits inside the Experience section, after the roles, under an h3 "Education" in `display-m`: the institution takes the organisation slot, the degree and GPA take the role line, and honours are a single bullet. It is not a section of its own and has no nav link.
+
 States: none. Entries are not links and not collapsible.
 
 Never:
@@ -485,14 +487,14 @@ Never:
 
 ### Contact
 
-Anatomy: h2, one sentence, then a primary button that is a `mailto:` link, and two secondary buttons for GitHub and LinkedIn. Buttons stack full width at 360 and sit in a row from 768. One field marking is allowed here (see Field markings).
+Anatomy: h2, one sentence (rendered only once PORTFOLIO_BRIEF.md supplies it; never written during a build), then a primary button that is a `mailto:` link, and two secondary buttons for GitHub and LinkedIn. Buttons stack full width at 360 and sit in a row from 768. One field marking is allowed here (see Field markings).
 
 States: the button primitives.
 
 Never:
 
 - Never a form, never a "copied!" toast, never social icons without text labels.
-- Never an email address invented or guessed. If the address is not in PORTFOLIO_BRIEF.md, the button is hidden in production and shows a TODO in preview.
+- Never an email address invented or guessed. If the address is not in PORTFOLIO_BRIEF.md, the button is hidden, and shows a TODO only when `VITE_SHOW_TODOS=true`.
 
 ### Footer
 
@@ -546,11 +548,12 @@ Runs once per page load, starting when the page is visible. Total 1,800ms. The h
 
 Constraints:
 
-- Court lines use `pathLength="1"` so every stroke shares one dash setup. Lines are `court-line`, 1.5px, `vector-effect: non-scaling-stroke`, round caps.
+- Court lines use `pathLength="1"` so every stroke shares one dash setup. Lines are `court-line`, 1.5px, `vector-effect: non-scaling-stroke`, round caps. One exception: while the sequence runs, non-scaling-stroke is switched off and the 1.5px width is computed from the chart's measured scale, because Chromium measures `pathLength` dashes in screen space under non-scaling-stroke and the lines fragment. Non-scaling-stroke is restored when the sequence ends.
+- The sequence is CSS keyframes driven by the motion tokens, started by script. Motion (the library) handles the filter, card reflow, count tile, menu and section entrances.
 - Bins are grouped per ring in the SVG (8 `g` elements) by distance from the rim, so the stagger is 8 timers, not 194. The cap is 200 bins; if the data is rebuilt and exceeds it, raise the minimum attempts, not the cap.
 - Performance gate (Phase 6): on a mid-range phone profile (4x CPU throttle), beat 4 must hold 60fps. If it does not, drop the per-bin scale and keep ring opacity only. Do not move the chart to canvas.
 - If the tab is hidden at load, the sequence waits for visibility. If the user scrolls past before it ends, it finishes anyway and is never replayed.
-- With JavaScript disabled or failed, the chart renders in its final state. The initial hidden state is applied by script, not by default CSS.
+- With JavaScript disabled or failed, the chart renders in its final state. The initial hidden state is applied by script, not by default CSS. Known gap after Phase 3: the site is client-rendered, so nothing renders at all without JavaScript. Closing it needs a prerender step, scheduled for Phase 6.
 
 ### Everything else
 
@@ -589,9 +592,9 @@ The structural motif. Chalk lines from real playing surfaces, drawn at regulatio
 | Marking | Source geometry | Where |
 |---|---|---|
 | Court (key, free-throw circle, three-point arc) | FIBA half court | Hero only, as the chart's own structure, at `court-line` strength |
-| Diamond (base paths, infield arc, home plate) | Baseball infield, 90ft base paths, 95ft infield arc | Projects section header band, right side, cropped |
+| Diamond (base paths, infield arc, home plate) | Baseball infield, 90ft base paths, 95ft infield arc | Projects section header band, right side, drawn whole at the band's height (a crop loses home plate and reads worse) |
 | Centre circle and halfway line | Pitch / court centre | Divider between About and Experience |
-| Baseline with hash marks | Court baseline | Divider above Contact, and the footer rule |
+| Baseline | FIBA court baseline. Its marks are the real lines that meet a baseline (sidelines, three-point corner lines, key edges), cropped by the band. A FIBA baseline has no hash marks of its own, so none are drawn. | Divider above Contact only. The footer rule is a plain 1px `line`, which keeps the count at three markings outside the hero. |
 
 Four markings in total. No track or kerb marking for motorsport and nothing for Core ML: a marking is not owed to every filter category.
 

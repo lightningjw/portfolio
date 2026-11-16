@@ -30,3 +30,18 @@ Append one line per decision: date, decision, short reason. Newest at the bottom
 - 2026-11-15: Hero data is the scraped BSN shot-location file (20,716 shots, 12 teams, games from 3 April to 6 June 2024), not Guaynabo-Mets-Reports, which has no shot coordinates. The raw file is never committed; only src/data/heroShotBins.json (bin totals, built by scripts/build_shot_bins.py) is public.
 - 2026-11-15: Hero bins are 0.5m hexagons with a 10-attempt minimum (194 bins). Colour is points per shot in five fixed classes; size is attempts on a square-root scale capped at 310.
 - 2026-11-15: Hero caption uses the shot-location file's own counts, not the 34K+ figure, which belongs to the model's training data.
+- 2026-11-15: Phase 3 build is in PR #3 (branch redesign/v2). Tokens live only in src/styles/tokens.css; lint fails on raw hex, Tailwind arbitrary values or literal px/rem/ms elsewhere in src/.
+- 2026-11-15: TODO placeholders are off in every build and opt-in with VITE_SHOW_TODOS=true. Supersedes "visible in development and PR preview builds". Reason: TODO text should never render by accident.
+- 2026-11-15: Missing content is acceptable for now: hero source credit, five project links, the GPT project result and the contact sentence stay hidden until PORTFOLIO_BRIEF.md supplies them.
+- 2026-11-15: Result tile is 200px wide from 768px up; the 168px width at 1024px is dropped. Reason: four plates plus a unit do not fit in 168px.
+- 2026-11-15: Below 768px the result tile stays 96px tall with the descriptor beside the plates, not under them.
+- 2026-11-15: Education renders inside the Experience section using the experience entry component.
+- 2026-11-15: Footer uses a plain 1px rule; the baseline marking appears only above Contact. Reason: keeps field markings at three outside the hero.
+- 2026-11-15: The baseline marking's ticks are the real lines that meet a FIBA baseline (sidelines, three-point corner lines, key edges), not hash marks.
+- 2026-11-15: The diamond marking is drawn whole in the Projects header band, not cropped.
+- 2026-11-15: Filter count tile always shows two plates; a single-digit count leaves the leading plate empty.
+- 2026-11-15: Hero sequence is CSS keyframes driven by the motion tokens; Motion handles the filter, card reflow, count tile, menu and section entrances. During the draw, court line width comes from the measured scale instead of non-scaling-stroke.
+- 2026-11-15: The no-JavaScript rule for the hero is not met by a client-rendered build; a prerender step is scheduled for Phase 6.
+- 2026-11-15: The site serves 4:5 WebP crops of the portrait (480px and 960px wide); portrait.JPG stays in the repo unmodified.
+- 2026-11-15: ESLint pinned to 9 until eslint-plugin-jsx-a11y supports 10.
+- 2026-11-15: GitHub Pages source switched to GitHub Actions; the gh-pages branch is no longer used.

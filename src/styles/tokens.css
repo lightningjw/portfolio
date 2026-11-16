@@ -1,0 +1,313 @@
+/*
+ * Design tokens for Direction B, "Hand-Operated".
+ * Source: docs/DESIGN.md (the frontmatter is normative).
+ *
+ * This is the only file in src/ that may contain raw colours, sizes or
+ * durations. Components reach these through Tailwind utilities or var().
+ * `npm run lint` enforces that (scripts/check-tokens.mjs).
+ */
+
+@font-face {
+  font-family: 'Big Shoulders Display';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('../assets/fonts/big-shoulders-display-latin-wght-normal.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 100 900;
+  font-stretch: 62% 125%;
+  font-display: swap;
+  src: url('../assets/fonts/archivo-latin-wdth-normal.woff2') format('woff2');
+}
+
+@theme static {
+  /* Clear every Tailwind default so only DESIGN.md values are reachable. */
+  --color-*: initial;
+  --font-*: initial;
+  --text-*: initial;
+  --font-weight-*: initial;
+  --tracking-*: initial;
+  --leading-*: initial;
+  --radius-*: initial;
+  --shadow-*: initial;
+  --inset-shadow-*: initial;
+  --drop-shadow-*: initial;
+  --blur-*: initial;
+  --breakpoint-*: initial;
+  --container-*: initial;
+  --ease-*: initial;
+  --animate-*: initial;
+  --spacing: initial;
+
+  /* Colour: surfaces */
+  --color-board: #10271d;
+  --color-board-deep: #0a1a13;
+  --color-board-raised: #17352a;
+  --color-board-raised-hover: #1c3d31;
+  --color-line: #2f5243;
+  --color-line-control: #5f8572;
+  /* Colour: text and accent */
+  --color-chalk: #f1ebdd;
+  --color-chalk-dim: #b4c0b1;
+  --color-chalk-faint: #8fa394;
+  --color-gold: #f2b632;
+  --color-gold-hover: #f7c656;
+  --color-gold-pressed: #d9a021;
+  /* Colour: sport accents (8px swatch only) */
+  --color-sport-baseball: #d0714a;
+  --color-sport-basketball: #cfa77e;
+  --color-sport-motorsport: #8fa6b2;
+  --color-sport-core-ml: #d9d2c0;
+  /* Colour: hero chart ramp, points per shot */
+  --color-bin-1: #2f5c42;
+  --color-bin-2: #4f7a48;
+  --color-bin-3: #879a49;
+  --color-bin-4: #c9ae3f;
+  --color-bin-5: #f2b632;
+  /* Colour: field markings, resolved against their ground */
+  --color-chalk-line-bg: #263b30; /* chalk at 10% on board */
+  --color-chalk-line-divider: #34463c; /* chalk at 16% on board */
+  --color-court-line: #95978c; /* chalk at 60% on board-deep */
+  /* Colour: recessed slot lips */
+  --color-slot-lip-dark: #050e0a;
+  --color-slot-lip-lit: #2f5243;
+
+  /* Families */
+  --font-display: 'Big Shoulders Display', Impact, Haettenschweiler, sans-serif;
+  --font-body: 'Archivo', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* Radii */
+  --radius-none: 0px;
+  --radius-plate: 2px;
+  --radius-control: 3px;
+
+  /* Spacing scale, 4px base */
+  --spacing-0: 0px;
+  --spacing-1: 4px;
+  --spacing-2: 8px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
+  --spacing-6: 24px;
+  --spacing-8: 32px;
+  --spacing-12: 48px;
+  --spacing-16: 64px;
+  --spacing-24: 96px;
+  --spacing-32: 128px;
+
+  /* Breakpoints (min-width) */
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1440px;
+
+  /* Layout */
+  --size-content-max: 1200px;
+  --size-measure: 65ch;
+  --size-margin-base: 16px;
+  --size-margin-md: 32px;
+  --size-margin-lg: 40px;
+  --size-gutter-base: 12px;
+  --size-gutter-md: 16px;
+  --size-gutter-lg: 24px;
+
+  /* Component dimensions */
+  --size-hairline: 1px;
+  --size-ring: 2px;
+  --size-ring-offset: 2px;
+  --size-nav: 56px;
+  --size-nav-lg: 64px;
+  --size-nav-bar: 2px;
+  --size-menu-row: 48px;
+  --size-button: 48px;
+  --size-touch: 44px;
+  --size-skill-plate: 28px;
+  --size-skill-plate-pad: 10px;
+  --size-swatch: 8px;
+  --size-marker: 6px;
+  --size-tile-height: 96px;
+  --size-tile-md: 200px;
+  --size-plate-digit: 0.62em;
+  --size-plate-point: 0.34em;
+  --size-plate-gap: 0.08em;
+  --size-plate-pad: 0.14em;
+  --size-underline: 1px;
+  --size-underline-hover: 2px;
+  --size-underline-offset: 3px;
+  --size-arrow: 16px;
+  --size-arrow-stroke: 1.5px;
+  --size-marking-stroke: 1px;
+  --size-marking-stroke-md: 1.5px;
+  --size-court-stroke: 1.5px;
+  --size-divider: 96px;
+  --size-divider-baseline: 32px;
+  --size-header-band: 96px;
+
+  /* Typography steps */
+  --type-display-xl-size: clamp(2.75rem, 1.2rem + 6.2vw, 5.5rem);
+  --type-display-xl-leading: 0.95;
+  --type-display-xl-weight: 800;
+  --type-display-xl-tracking: 0.01em;
+  --type-display-l-size: clamp(2rem, 1.4rem + 2.4vw, 3.25rem);
+  --type-display-l-leading: 1;
+  --type-display-l-weight: 700;
+  --type-display-l-tracking: 0.015em;
+  --type-display-m-size: 1.625rem;
+  --type-display-m-leading: 1.1;
+  --type-display-m-weight: 700;
+  --type-display-m-tracking: 0.02em;
+  --type-display-s-size: 1.25rem;
+  --type-display-s-leading: 1.15;
+  --type-display-s-weight: 700;
+  --type-display-s-tracking: 0.03em;
+  --type-numeral-xl-size: 3.5rem;
+  --type-numeral-xl-weight: 800;
+  --type-numeral-m-size: 1.5rem;
+  --type-numeral-m-weight: 700;
+  --type-numeral-leading: 1;
+  --type-body-l-size: 1.125rem;
+  --type-body-size: 1rem;
+  --type-body-s-size: 0.875rem;
+  --type-body-leading: 1.6;
+  --type-body-s-leading: 1.5;
+  --type-body-weight: 400;
+  --type-emphasis-weight: 600;
+  --type-label-size: 0.8125rem;
+  --type-label-tracking: 0.08em;
+  --type-label-s-size: 0.75rem;
+  --type-label-s-tracking: 0.1em;
+  --type-label-leading: 1.2;
+  --type-label-weight: 600;
+  --type-label-width: 'wdth' 88;
+
+  /* Motion */
+  --duration-press: 80ms;
+  --duration-fast: 140ms;
+  --duration-base: 220ms;
+  --duration-layout: 260ms;
+  --duration-draw: 600ms;
+  --duration-bin: 240ms;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-draw: cubic-bezier(0.33, 1, 0.68, 1);
+  --ease-in: cubic-bezier(0.5, 0, 0.75, 0);
+  --stagger-section: 40ms;
+  --stagger-section-max: 5;
+  --stagger-ring: 60ms;
+  --distance-enter: 8px;
+  --distance-nudge: 3px;
+  --scale-press: 0.98;
+  --scale-bin-from: 0.7;
+
+  /* Hero sequence: start time of each beat (DESIGN.md, Motion) */
+  --hero-beat-1: 0ms;
+  --hero-beat-2: 200ms;
+  --hero-beat-3: 400ms;
+  --hero-beat-rim: 800ms;
+  --hero-beat-4: 900ms;
+  --hero-beat-5: 1560ms;
+}
+
+/* Typography steps as single utilities, so a component cannot mix a size
+   from one step with the tracking of another. */
+
+@utility type-display-xl {
+  font-family: var(--font-display);
+  font-size: var(--type-display-xl-size);
+  line-height: var(--type-display-xl-leading);
+  font-weight: var(--type-display-xl-weight);
+  letter-spacing: var(--type-display-xl-tracking);
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+@utility type-display-l {
+  font-family: var(--font-display);
+  font-size: var(--type-display-l-size);
+  line-height: var(--type-display-l-leading);
+  font-weight: var(--type-display-l-weight);
+  letter-spacing: var(--type-display-l-tracking);
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+@utility type-display-m {
+  font-family: var(--font-display);
+  font-size: var(--type-display-m-size);
+  line-height: var(--type-display-m-leading);
+  font-weight: var(--type-display-m-weight);
+  letter-spacing: var(--type-display-m-tracking);
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+@utility type-display-s {
+  font-family: var(--font-display);
+  font-size: var(--type-display-s-size);
+  line-height: var(--type-display-s-leading);
+  font-weight: var(--type-display-s-weight);
+  letter-spacing: var(--type-display-s-tracking);
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+@utility type-numeral-xl {
+  font-family: var(--font-display);
+  font-size: var(--type-numeral-xl-size);
+  line-height: var(--type-numeral-leading);
+  font-weight: var(--type-numeral-xl-weight);
+  letter-spacing: 0;
+}
+
+@utility type-numeral-m {
+  font-family: var(--font-display);
+  font-size: var(--type-numeral-m-size);
+  line-height: var(--type-numeral-leading);
+  font-weight: var(--type-numeral-m-weight);
+  letter-spacing: 0;
+}
+
+@utility type-body-l {
+  font-family: var(--font-body);
+  font-size: var(--type-body-l-size);
+  line-height: var(--type-body-leading);
+  font-weight: var(--type-body-weight);
+  text-wrap: pretty;
+}
+
+@utility type-body {
+  font-family: var(--font-body);
+  font-size: var(--type-body-size);
+  line-height: var(--type-body-leading);
+  font-weight: var(--type-body-weight);
+  text-wrap: pretty;
+}
+
+@utility type-body-s {
+  font-family: var(--font-body);
+  font-size: var(--type-body-s-size);
+  line-height: var(--type-body-s-leading);
+  font-weight: var(--type-body-weight);
+}
+
+@utility type-label {
+  font-family: var(--font-body);
+  font-size: var(--type-label-size);
+  line-height: var(--type-label-leading);
+  font-weight: var(--type-label-weight);
+  letter-spacing: var(--type-label-tracking);
+  font-variation-settings: var(--type-label-width);
+  text-transform: uppercase;
+}
+
+@utility type-label-s {
+  font-family: var(--font-body);
+  font-size: var(--type-label-s-size);
+  line-height: var(--type-label-leading);
+  font-weight: var(--type-label-weight);
+  letter-spacing: var(--type-label-s-tracking);
+  font-variation-settings: var(--type-label-width);
+  text-transform: uppercase;
+}
