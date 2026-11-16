@@ -1,6 +1,16 @@
 @import 'tailwindcss';
 @import './tokens.css';
 
+/* Hover styles only where there is a real hovering pointer. Touch screens
+   fire :hover on tap and leave it stuck, so both conditions are required. */
+@custom-variant hover {
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      @slot;
+    }
+  }
+}
+
 @layer base {
   :root {
     color-scheme: dark;
@@ -141,7 +151,7 @@
   text-decoration-thickness: var(--size-underline);
   text-underline-offset: var(--size-underline-offset);
 
-  @media (hover: hover) {
+  @media (hover: hover) and (pointer: fine) {
     &:hover {
       text-decoration-thickness: var(--size-underline-hover);
     }
