@@ -18,6 +18,7 @@ export interface MotionTokens {
   staggerSectionMax: number;
   /** Pixels. */
   enter: number;
+  radiusControl: number;
   easeOut: Bezier;
   easeInOut: Bezier;
   easeIn: Bezier;
@@ -62,6 +63,7 @@ export function motionTokens(): MotionTokens {
     staggerSection: seconds('--stagger-section'),
     staggerSectionMax: number('--stagger-section-max'),
     enter: number('--distance-enter'),
+    radiusControl: number('--radius-control'),
     easeOut: bezier('--ease-out'),
     easeInOut: bezier('--ease-in-out'),
     easeIn: bezier('--ease-in'),

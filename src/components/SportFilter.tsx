@@ -50,7 +50,11 @@ export function SportFilter({ sports, value, onChange, count, status }: SportFil
                 <motion.span
                   layoutId="filter-gold"
                   aria-hidden="true"
-                  className="absolute -inset-(--size-hairline) rounded-control bg-gold"
+                  className="absolute -inset-(--size-hairline) bg-gold"
+                  // The radius is an inline value so Motion can counter-scale it:
+                  // the plate stretches between plates of different widths, and a
+                  // class-set radius stretched with it.
+                  style={{ borderRadius: tokens.radiusControl }}
                   transition={{ duration: tokens.layout, ease: tokens.easeInOut }}
                 />
               ) : null}
