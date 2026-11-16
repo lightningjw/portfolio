@@ -413,10 +413,10 @@ Anatomy, top to bottom:
 2. **Title:** h3, `display-m`, chalk.
 3. **Question:** the project's question, `body-l`, chalk. This is the lead. It is never truncated.
 4. **Method row:** the field label METHOD in `label-s` `chalk-dim`, then a short method line in `body-s` `chalk-dim`. The short line is a tightened form of the brief's method text and lives in `projects.ts` as its own field. It must be approved before it ships (see TODOs).
-5. **Result tile:** a recessed slot holding the headline value on plates (`numeral-xl`, chalk), the unit in `label-s`, and a one-line descriptor in `label-s` `chalk-dim` (for example the baseline it is measured against). From 768 the descriptor sits under the plates; below 768 it sits beside them, to the right of the unit. One tile per card.
+5. **Result tile:** a recessed slot holding the headline value on plates (`numeral-xl`, chalk), the unit in `label-s`, and a one-line descriptor in `label-s` `chalk-dim` (for example the baseline it is measured against). From 768 the descriptor sits under the plates; below 768 it sits beside them, to the right of the unit, while it has at least 72px of width, and drops under them when it does not. A unit that does not fit beside the plates drops under them at any width. An empty unit or descriptor renders nothing. One tile per card.
 6. **Link:** an arrow link, present only if the project has a URL.
 
-Layout: below 768 the tile is full width under the method row, 96px tall, with the plates and the descriptor side by side (plates at `numeral-xl` are 72px tall, so a descriptor under them does not fit in 96px). From 768 the tile sits at the card's top right, 200px wide, at every wider breakpoint. From 1024 the grid is 2 columns. The tile is never narrower than 200px: four plates plus a unit ("95.6 MPH") need about 170px of inner width. Card padding 24 (16 at 360). Cards in a row share height; the question grows, the tile stays pinned.
+Layout: below 768 the tile is full width under the method row, at least 96px tall, with the plates and the descriptor side by side. The tile grows when the descriptor has dropped under the plates or runs past four lines; it never clips or spills (Phase 5: at 320 the Eldridge descriptor ran past the tile's edge). From 768 the tile sits at the card's top right, 200px wide, at every wider breakpoint. From 1024 the grid is 2 columns. The tile is never narrower than 200px: four plates plus a unit ("95.6 MPH") need about 170px of inner width. Card padding 24 (16 at 360). Cards in a row share height; the question grows, the tile stays pinned.
 
 States:
 
@@ -432,7 +432,7 @@ Never:
 - Never "N/A", "0", "Coming soon" or a dash in a blank tile.
 - Never a coloured edge stripe, corner ribbon or badge for the sport. The swatch and label are the only sport marking.
 - Never lifts, tilts, scales or casts a shadow on hover.
-- Never truncates with an ellipsis. Long titles wrap.
+- Never truncates with an ellipsis. Long titles wrap, and a word wider than its column breaks (`overflow-wrap: break-word`, set once on `body`).
 
 ### Sport filter
 
