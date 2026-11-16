@@ -25,7 +25,7 @@ export function Nav() {
 
   // The current-section bar is one element. It is placed under the active
   // link by transform, and only slides once it has a position to slide from.
-  const placeBar = useCallback(() => {
+  const placeBar = useCallback((slide = true) => {
     const bar = barRef.current;
     if (!bar) return;
     const link = active ? listRef.current?.querySelector<HTMLElement>(`[data-section="${active}"]`) : null;
@@ -34,7 +34,7 @@ export function Nav() {
       bar.removeAttribute('data-slide');
       return;
     }
-    bar.toggleAttribute('data-slide', bar.hasAttribute('data-placed'));
+    bar.toggleAttribute('data-slide', slide && bar.hasAttribute('data-placed'));
     bar.style.transform = `translateX(${link.offsetLeft}px) scaleX(${link.offsetWidth})`;
     bar.setAttribute('data-placed', '');
   }, [active]);
@@ -46,7 +46,8 @@ export function Nav() {
   useEffect(() => {
     const list = listRef.current;
     if (!list) return;
-    const observer = new ResizeObserver(placeBar);
+    // A resize or a late font swap re-places the bar without a slide.
+    const observer = new ResizeObserver(() => placeBar(false));
     observer.observe(list);
     return () => observer.disconnect();
   }, [placeBar]);

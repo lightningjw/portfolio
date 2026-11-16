@@ -9,7 +9,7 @@ import { ShotChart } from './ShotChart';
 export function Hero() {
   const figureRef = useRef<HTMLElement>(null);
 
-  const playedRef = useRef(false);
+  const sequenceRef = useRef<'idle' | 'running' | 'done'>('idle');
 
   // The chart is fully drawn by default. This arms the sequence (the hidden
   // first frame is applied here, by script) and plays it once, as soon as the
@@ -18,34 +18,44 @@ export function Hero() {
     const figure = figureRef.current;
     const svg = figure?.querySelector('svg');
     const lastBeat = figure?.querySelector('[data-beat="5"]');
-    if (!figure || !svg || !lastBeat || playedRef.current || prefersReducedMotion()) return;
+    if (!figure || !svg || !lastBeat || sequenceRef.current === 'done' || prefersReducedMotion()) return;
 
     const run = () => {
-      playedRef.current = true;
+      sequenceRef.current = 'running';
       // Screen pixels per viewBox unit. While the lines draw, their width is
       // set from this instead of non-scaling-stroke, which breaks the
       // pathLength dash setup in Chromium.
       figure.style.setProperty('--court-scale', String(svg.clientWidth / COURT.width));
       figure.dataset.hero = 'run';
     };
+    // Ends on the last beat finishing, or on it being cancelled (reduced
+    // motion switched on mid-sequence). Either way the chart is left in its
+    // default, fully drawn state.
     const finish = (event: Event) => {
       if (event.target !== lastBeat) return;
+      sequenceRef.current = 'done';
       figure.removeAttribute('data-hero');
       figure.style.removeProperty('--court-scale');
     };
     const onVisible = () => {
-      if (document.visibilityState === 'visible' && !playedRef.current) run();
+      if (document.visibilityState === 'visible' && sequenceRef.current === 'idle') run();
     };
 
+    // Listeners attach on every effect run, so a re-run while the sequence
+    // is playing (React StrictMode) still gets its ending.
     lastBeat.addEventListener('animationend', finish);
-    if (document.visibilityState === 'visible') {
-      run();
-    } else {
-      figure.dataset.hero = 'armed';
-      document.addEventListener('visibilitychange', onVisible);
+    lastBeat.addEventListener('animationcancel', finish);
+    if (sequenceRef.current === 'idle') {
+      if (document.visibilityState === 'visible') {
+        run();
+      } else {
+        figure.dataset.hero = 'armed';
+        document.addEventListener('visibilitychange', onVisible);
+      }
     }
     return () => {
       lastBeat.removeEventListener('animationend', finish);
+      lastBeat.removeEventListener('animationcancel', finish);
       document.removeEventListener('visibilitychange', onVisible);
     };
   }, []);
