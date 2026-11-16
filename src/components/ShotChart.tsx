@@ -50,10 +50,10 @@ export function ShotChart() {
             <circle cx={RIM.cx} cy={RIM.cy} r={RIM.r} className="court-line" />
           </g>
           {RINGS.map((ring, index) => (
-            // One custom property per ring; the bins inherit their delay from it.
-            <g key={index} data-ring={index} style={{ '--ring-index': index } as CSSProperties}>
+            // One ring is one animated group; its index sets its delay.
+            <g key={index} data-ring={index} data-beat="4" style={{ '--ring-index': index } as CSSProperties}>
               {ring.map((bin) => (
-                <polygon key={bin.key} points={bin.points} data-beat="4" className={BIN_FILL[bin.ppsClass]} />
+                <polygon key={bin.key} points={bin.points} className={BIN_FILL[bin.ppsClass]} />
               ))}
             </g>
           ))}

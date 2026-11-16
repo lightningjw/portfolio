@@ -201,7 +201,6 @@
   --distance-enter: 8px;
   --distance-nudge: 3px;
   --scale-press: 0.98;
-  --scale-bin-from: 0.7;
 
   /* Hero sequence: start time of each beat (DESIGN.md, Motion) */
   --hero-beat-1: 0ms;

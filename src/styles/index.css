@@ -201,17 +201,6 @@
   }
 }
 
-@keyframes hero-bin {
-  from {
-    opacity: 0;
-    transform: scale(var(--scale-bin-from));
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
 @keyframes hero-rise {
   from {
     opacity: 0;
@@ -262,18 +251,15 @@
     animation-delay: var(--hero-beat-rim);
   }
 
-  /* One delay per ring (8 groups), inherited by the bins inside it. */
-  [data-hero] [data-ring] {
-    --ring-delay: calc(var(--hero-beat-4) + var(--ring-index) * var(--stagger-ring));
-  }
-
+  /* Bins plot in by ring: one opacity animation per ring group (8), not one
+     per bin (194). Starting 194 animations in one frame cost a long
+     style recalculation at 4x CPU throttling and dropped the first frames
+     of the line draw. */
   [data-hero] [data-beat='4'] {
-    transform-box: fill-box;
-    transform-origin: center;
-    animation-name: hero-bin;
+    animation-name: hero-fade;
     animation-duration: var(--duration-bin);
     animation-timing-function: var(--ease-out);
-    animation-delay: var(--ring-delay);
+    animation-delay: calc(var(--hero-beat-4) + var(--ring-index) * var(--stagger-ring));
   }
 
   [data-hero] [data-beat='5'] {
