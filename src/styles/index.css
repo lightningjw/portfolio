@@ -281,6 +281,13 @@
   }
 }
 
+/* Focus ring drawn inside the box, for a control that fills its container to an edge of the viewport (the desktop nav links). */
+@utility ring-inset {
+  &:focus-visible {
+    outline-offset: calc(var(--size-ring) * -1);
+  }
+}
+
 /* A link whose hit area and focus ring cover its positioned ancestor (the card). */
 @utility stretched-link {
   &::after {

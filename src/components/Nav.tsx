@@ -80,7 +80,7 @@ export function Nav() {
                 href={`#${link.id}`}
                 data-section={link.id}
                 aria-current={active === link.id ? 'location' : undefined}
-                className={`type-label flex h-full items-center px-4 hover:text-chalk ${
+                className={`type-label ring-inset flex h-full items-center px-4 hover:text-chalk ${
                   active === link.id ? 'text-chalk' : 'text-chalk-dim'
                 }`}
               >

@@ -13,7 +13,7 @@ export function App() {
     <MotionConfig reducedMotion="user">
       <a
         href="#main"
-        className="type-label sr-only z-20 rounded-control bg-gold px-4 text-board focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:flex focus:h-(--size-touch) focus:items-center"
+        className="type-label sr-only z-20 rounded-control bg-gold text-board focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:flex focus:h-(--size-touch) focus:items-center focus:px-4"
       >
         Skip to main content
       </a>

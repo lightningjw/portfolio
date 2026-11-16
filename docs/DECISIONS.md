@@ -59,3 +59,8 @@ Append one line per decision: date, decision, short reason. Newest at the bottom
 - 2026-11-15: Motion rule amended: the filter's gold layer animates clip-path, the second exception after the hero's stroke-drawn lines. The gold is a clipped copy of the plate row, so labels change colour at the gold's edge. Supersedes the shared-layout plate and the 200ms delay-filter-settle cut.
 - 2026-11-15: ease-in-out is cubic-bezier(0.77, 0, 0.175, 1). Supersedes 0.65, 0, 0.35, 1.
 - 2026-11-15: Section stagger uses shrinking gaps (50, 40, 30, 20ms) instead of a uniform 40ms.
+- 2026-11-16: Phase 6 verification is in a new PR from redesign/v2; PR #4 was merged before Phase 6 started.
+- 2026-11-16: The social preview image is public/og.png, the hero captured at 1200x630 under reduced motion. Open Graph, Twitter card and canonical tags use the absolute URL https://lightningjw.github.io/portfolio/. Recapture og.png when the hero changes.
+- 2026-11-16: TodoNote reads VITE_SHOW_TODOS itself so the bundler removes its "TODO" text from every default build. The field notes passed to todo() still ship as unrendered strings in the bundle.
+- 2026-11-16: Desktop nav links draw their focus ring inside the box (ring-inset). Reason: at full nav height the offset ring's top edge fell outside the viewport.
+- 2026-11-16: The prerender step is dropped. With JavaScript off, a noscript fallback in index.html shows the name, headline and contact links. Supersedes "a prerender step is scheduled for Phase 6". Reason: server-rendering React and Motion adds a hydration path that can break the hero, for visitors who are close to nonexistent; search crawlers run JavaScript and link previews read the Open Graph tags.
