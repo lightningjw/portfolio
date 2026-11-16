@@ -12,7 +12,7 @@ export function SportSwatch({ sport, onGold = false }: { sport: SportId; onGold?
   return (
     <span
       aria-hidden="true"
-      className={`inline-block size-(--size-swatch) shrink-0 ${onGold ? 'on-gold-settle bg-board' : SWATCH[sport]}`}
+      className={`inline-block size-(--size-swatch) shrink-0 ${onGold ? 'bg-board' : SWATCH[sport]}`}
     />
   );
 }

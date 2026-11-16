@@ -131,16 +131,17 @@
 }
 
 /*
- * Filter plate contents (label and swatch) switch to their on-gold colour
- * only once the travelling gold plate has landed under them. The switch is
- * still a hard cut, never a fade: it is a delay, not a colour animation.
- * Without it the label is board on board, invisible, while the gold travels.
- * Leaving the active state has no delay.
+ * The filter's gold layer: a copy of the plate row in its on-gold colours,
+ * clipped to the active plate. Moving the clip is what moves the gold, so
+ * each label changes colour exactly at the gold's edge. The one clip-path
+ * animation on the site (DESIGN.md, Motion). The inset is set by script.
  */
-@utility on-gold-settle {
-  transition:
-    color 0s linear var(--delay-filter-settle),
-    background-color 0s linear var(--delay-filter-settle);
+@utility gold-clip {
+  clip-path: inset(0 100% 100% 0 round var(--radius-control));
+
+  &[data-travel] {
+    transition: clip-path var(--duration-layout) var(--ease-in-out);
+  }
 }
 
 /* Text link in body copy: chalk with a gold underline. */
