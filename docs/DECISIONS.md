@@ -51,3 +51,11 @@ Append one line per decision: date, decision, short reason. Newest at the bottom
 - 2026-11-15: A newly active filter label and swatch cut to board after delay-filter-settle (200ms), once the gold plate has landed. It is a delayed hard cut, not a colour animation, so the transform-and-opacity rule stands. Reason: the label was board on board while the gold travelled.
 - 2026-11-15: Under reduced motion the press scale and arrow nudge are removed outright, not just their transitions.
 - 2026-11-15: Motion durations are parsed from the CSS tokens with their unit. Reason: the minifier turns 260ms into .26s and every Motion animation was finishing inside one frame in production.
+- 2026-11-15: The mobile menu closes instantly on Escape; pointer closes keep the exit.
+- 2026-11-15: Hover styles are gated on (hover: hover) and (pointer: fine).
+- 2026-11-15: Exits use ease-out; the ease-in token is removed. Reason: ease-in delays the moment being watched.
+- 2026-11-15: Press feedback is 160ms and scale 0.97. Supersedes 80ms and 0.98.
+- 2026-11-15: Entering filter cards start after duration-fast (140ms), alongside the reflow, not after it.
+- 2026-11-15: Motion rule amended: the filter's gold layer animates clip-path, the second exception after the hero's stroke-drawn lines. The gold is a clipped copy of the plate row, so labels change colour at the gold's edge. Supersedes the shared-layout plate and the 200ms delay-filter-settle cut.
+- 2026-11-15: ease-in-out is cubic-bezier(0.77, 0, 0.175, 1). Supersedes 0.65, 0, 0.35, 1.
+- 2026-11-15: Section stagger uses shrinking gaps (50, 40, 30, 20ms) instead of a uniform 40ms.
