@@ -19,6 +19,8 @@ export function Nav() {
   const active = useActiveSection(SECTION_IDS);
   const tokens = useMotionTokens();
   const [open, setOpen] = useState(false);
+  // A keyboard close (Escape) is instant: keyboard actions do not animate.
+  const [instantClose, setInstantClose] = useState(false);
   const listRef = useRef<HTMLUListElement>(null);
   const barRef = useRef<HTMLLIElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
@@ -56,6 +58,7 @@ export function Nav() {
     if (!open) return;
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key !== 'Escape') return;
+      setInstantClose(true);
       setOpen(false);
       menuButtonRef.current?.focus();
     };
@@ -97,21 +100,33 @@ export function Nav() {
           type="button"
           aria-expanded={open}
           aria-controls={MENU_ID}
-          onClick={() => setOpen((value) => !value)}
+          onClick={() => {
+            setInstantClose(false);
+            setOpen((value) => !value);
+          }}
           className="pressable type-label flex h-(--size-touch) items-center px-3 text-chalk lg:hidden"
         >
           {open ? 'Close' : 'Menu'}
         </button>
       </nav>
 
-      <AnimatePresence>
+      <AnimatePresence custom={instantClose}>
         {open ? (
           <motion.div
             id={MENU_ID}
             className="absolute inset-x-0 top-full z-20 border-b border-line bg-board lg:hidden"
-            initial={{ opacity: 0, y: -tokens.enter }}
-            animate={{ opacity: 1, y: 0, transition: { duration: tokens.fast, ease: tokens.easeOut } }}
-            exit={{ opacity: 0, y: -tokens.enter, transition: { duration: tokens.fast, ease: tokens.easeIn } }}
+            custom={instantClose}
+            variants={{
+              open: { opacity: 1, y: 0, transition: { duration: tokens.fast, ease: tokens.easeOut } },
+              closed: (instant: boolean) => ({
+                opacity: 0,
+                y: -tokens.enter,
+                transition: { duration: instant ? 0 : tokens.fast, ease: tokens.easeIn },
+              }),
+            }}
+            initial="closed"
+            animate="open"
+            exit="closed"
           >
             <ul className="shell">
               {LINKS.map((link) => (
