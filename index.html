@@ -39,6 +39,21 @@
   </head>
   <body>
     <div id="root"></div>
+    <!-- The site is client-rendered. Without JavaScript, visitors get the name, headline and contact links. -->
+    <noscript>
+      <div class="shell flex flex-col gap-6 py-16">
+        <h1 class="type-display-l text-chalk">Justin Wong</h1>
+        <p class="type-body-l measure text-chalk">
+          Sports analytics and machine learning, from raw data to decision.
+        </p>
+        <p class="type-body measure text-chalk-dim">This site needs JavaScript to show the projects.</p>
+        <p class="type-body flex flex-wrap gap-6 text-chalk">
+          <a class="text-link" href="mailto:juswon@umich.edu">Email</a>
+          <a class="text-link" href="https://github.com/lightningjw">GitHub</a>
+          <a class="text-link" href="https://www.linkedin.com/in/jusawon/">LinkedIn</a>
+        </p>
+      </div>
+    </noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
